@@ -34,7 +34,7 @@ class FrontVC: UIViewController {
 
 }
 
-extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate {
+extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     // 컬렉션 뷰에 총 몇개의 벳울 표시할 것인가
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return frontList.count
