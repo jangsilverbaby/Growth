@@ -17,6 +17,10 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
     @IBOutlet weak var alertTime: UITextField! // 알림 시간
     
     var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "4년"]
+
+    let datePicker = UIDatePicker() // 시작 날짜 피커뷰
+    let cyclePicker = UIPickerView() // 알림 주기 피커뷰
+    let timePicker = UIDatePicker() // 알림 시간 피커뷰
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +32,12 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         self.profileImg.image = image
         self.profileImg.contentMode = .scaleAspectFill
         
-        // 시작 날짜 피커뷰
-        let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
-        datePicker.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
+        datePicker.preferredDatePickerStyle = .inline
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         startDate.inputView = datePicker
         
-        // 알림 주기 피커뷰
-        let cyclePicker = UIPickerView()
+        
         cyclePicker.delegate = self
         self.alertCycle.inputView = cyclePicker
         
@@ -51,6 +53,23 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([flexSpace, done], animated: true)
         
+        // 알림 시간 피커뷰
+        timePicker.datePickerMode = .time
+        timePicker.preferredDatePickerStyle = .wheels
+        alertTime.inputView = timePicker
+        
+        // 알림 시간 피커뷰의 툴 바
+        let toolbar1 = UIToolbar()
+        toolbar1.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
+        toolbar1.barTintColor = .lightGray
+        self.alertTime.inputAccessoryView = toolbar1
+        let done1 = UIBarButtonItem()
+        done1.title = "Done"
+        done1.target = self
+        done1.action = #selector(timeChanged)
+        let flexSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar1.setItems([flexSpace1, done1], animated: true)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -59,6 +78,10 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         startDate.text = dateFormatter.string(from: Date())
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        alertTime.text = timeFormatter.string(from: Date())
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
@@ -159,10 +182,20 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         }
     }
     
-    @objc func dateChanged(datePicker: UIDatePicker) {
+    @objc func dateChanged(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
-        startDate.text = dateFormatter.string(from: datePicker.date)
+        startDate.text = dateFormatter.string(from: sender.date)
+        
+        /* 데이터에 저장하는 부분을 구현할 예정*/
+        
+        view.endEditing(true)
+    }
+    
+    @objc func timeChanged() {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        alertTime.text = timeFormatter.string(from: timePicker.date)
         
         /* 데이터에 저장하는 부분을 구현할 예정*/
         
