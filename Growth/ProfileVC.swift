@@ -9,7 +9,7 @@ import UIKit
 class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
-    @IBOutlet weak var name: UITextField! // 이름
+    @IBOutlet weak var name: UILabel! // 이름
     @IBOutlet weak var startDate: UITextField! // 시작 날짜
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
@@ -67,6 +67,8 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
     // 주기 입력 후에 실행될 코드
     @objc func alertCycleDone(_ sender : Any) {
         self.view.endEditing(true)
+        
+        /* 데이터에 저장하는 부분을 구현할 예정*/
     }
     
     func imgPicker(_ source : UIImagePickerController.SourceType) {
@@ -107,9 +109,32 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
     // 이미지를 선택하면 이 메소드가 자동으로 호출된다.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            
+            /* 데이터에 저장하는 부분을 구현할 예정*/
+            
             self.profileImg.image = img
         }
         // 이 구문을 누락하면 이미지 피커 컨트롤러 창은 닫히지 않는다.
         picker.dismiss(animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
+            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
+            // 입력 필드 추가
+            alert.addTextField() {
+                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
+            }
+            // 버튼 및 액션 추가
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                let value = alert.textFields?[0].text
+                
+                /* 데이터에 저장하는 부분을 구현할 예정*/
+                
+                self.name.text = value
+            })
+            // 알림창 띄움
+            self.present(alert, animated: false, completion: nil)
+        }
     }
 }

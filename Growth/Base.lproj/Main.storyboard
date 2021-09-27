@@ -182,12 +182,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CUO-m9-Pf3">
-                                                    <rect key="frame" x="194" y="6" width="200" height="34"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7un-bN-MPQ">
+                                                    <rect key="frame" x="128" y="12" width="266" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -294,7 +295,7 @@
                         <outlet property="alertCycle" destination="keH-rB-yd9" id="42f-bN-A1L"/>
                         <outlet property="alertTime" destination="IPL-Sw-J8q" id="6e5-h7-sMY"/>
                         <outlet property="isAlert" destination="2kf-RI-XZX" id="ooE-Qn-v1Y"/>
-                        <outlet property="name" destination="CUO-m9-Pf3" id="gkH-gX-l72"/>
+                        <outlet property="name" destination="7un-bN-MPQ" id="ZYX-N6-ogP"/>
                         <outlet property="profileImg" destination="l4f-6g-b62" id="5Iu-qF-kV9"/>
                         <outlet property="profileImgEditBtn" destination="ACK-mr-2lq" id="rjC-3c-sJd"/>
                         <outlet property="startDate" destination="un7-CN-uof" id="XQ2-ed-9sb"/>
