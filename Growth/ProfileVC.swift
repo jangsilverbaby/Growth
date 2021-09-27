@@ -6,7 +6,8 @@
 //
 import UIKit
 
-class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate
+{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
     @IBOutlet weak var name: UILabel! // 이름
@@ -18,6 +19,8 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
     var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "4년"]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.navigationItem.title = "프로필"
         
         // 프로필 이미지
@@ -25,10 +28,16 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         self.profileImg.image = image
         self.profileImg.contentMode = .scaleAspectFill
         
+        // 시작 날짜 피커뷰
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.addTarget(self, action: #selector(dateChanged(datePicker:)), for: .valueChanged)
+        startDate.inputView = datePicker
+        
         // 알림 주기 피커뷰
-        let picker = UIPickerView()
-        picker.delegate = self
-        self.alertCycle.inputView = picker
+        let cyclePicker = UIPickerView()
+        cyclePicker.delegate = self
+        self.alertCycle.inputView = cyclePicker
         
         // 알림 주기 피커뷰의 툴 바
         let toolbar = UIToolbar()
@@ -41,8 +50,20 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         done.action = #selector(alertCycleDone)
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([flexSpace, done], animated: true)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        
+        /* 데이터에 저장하는 부분을 구현할 예정*/
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        startDate.text = dateFormatter.string(from: Date())
     }
     
+    @objc func viewTapped(_ sender : UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
     // 생성할 컴포넌트 개수 정의
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -136,5 +157,15 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
             // 알림창 띄움
             self.present(alert, animated: false, completion: nil)
         }
+    }
+    
+    @objc func dateChanged(datePicker: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        startDate.text = dateFormatter.string(from: datePicker.date)
+        
+        /* 데이터에 저장하는 부분을 구현할 예정*/
+        
+        view.endEditing(true)
     }
 }
