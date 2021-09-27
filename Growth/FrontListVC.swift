@@ -47,6 +47,7 @@ extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
         
         cell.frontImgView.image = item.frontImg
         cell.frontImgView.contentMode = .scaleAspectFill
+        cell.frontImgView.layer.cornerRadius = 5.0
         cell.nameLabel.text = item.name
         
         return cell
