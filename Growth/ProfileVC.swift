@@ -9,35 +9,65 @@ import UIKit
 class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
-    @IBOutlet weak var name: UILabel! // 이름
     @IBOutlet weak var startDate: UITextField! // 시작 날짜
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
     @IBOutlet weak var alertTime: UITextField! // 알림 시간
     
-    var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "4년"]
-
+    // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
+    var defaultPList : NSDictionary!
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var profileSegue = ""
+    
+    var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "삼 년"]
+    
     let datePicker = UIDatePicker() // 시작 날짜 피커뷰
     let cyclePicker = UIPickerView() // 알림 주기 피커뷰
     let timePicker = UIDatePicker() // 알림 시간 피커뷰
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "프로필"
         
-        // 프로필 이미지
-        profileImgVDL()
+        // 메인 번들 ProfileInfo.plist가 포함되어 있으면 이를 읽어와 딕셔너리에 담는다.
+        if let defaultPListPath = Bundle.main.path(forResource: "ProfileInfo", ofType: "plist") {
+            self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
+        }
         
         // 이름
+        if profileSegue == "addProfile" {
+            let alert = UIAlertController(title: "이름을 입력해하세요", message: "입력 완료 후 이름을 변경할 수 없습니다.", preferredStyle: .alert)
+            alert.addTextField()
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                if let name = alert.textFields?[0].text {
+                    self.appDelegate.frontlist.append(FrontData(frontImg: UIImage(named: "account.jpg")!, name: name))
+                    
+                    self.profileImg.image = UIImage(named: "account.jpg")
+                    self.self.navigationItem.title = name
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy.MM.dd"
+                    self.startDate.text = dateFormatter.string(from: Date())
+                    self.isAlert.isOn = false
+                    self.alertCycle.text = "하루"
+                    let timeFormatter = DateFormatter()
+                    timeFormatter.dateFormat = "hh:mm a"
+                    self.alertTime.text = timeFormatter.string(from: Date())
+                    
+                    let plist = UserDefaults.standard
+                    plist.set(self.appDelegate.frontlist, forKey: "frontlist")
+                    plist.set(name, forKey: "selectedName")
+                    plist.synchronize()
+                }
+            })
+            
+            self.present(alert, animated: false, completion: nil)
+        }
         
         // 시작 날짜
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         startDate.inputView = datePicker
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        startDate.text = dateFormatter.string(from: Date())
+
         
         // 알림 유무
         
@@ -61,10 +91,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         alertTime.inputView = timePicker
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        alertTime.text = timeFormatter.string(from: Date())
-                
+        
         // 알림 시간 피커뷰의 툴 바
         let toolbar1 = UIToolbar()
         toolbar1.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
@@ -81,30 +108,15 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        
+        // 불러온 값을 설정
+        //self.profileImg.image = UIImage(data: plist.data(forKey: "profileImg")!)
+        //self.name.text = plist.string(forKey: "name")
+        
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
         view.endEditing(true)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
-            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
-            // 입력 필드 추가
-            alert.addTextField() {
-                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
-            }
-            // 버튼 및 액션 추가
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-                let value = alert.textFields?[0].text
-                
-                /* 데이터에 저장하는 부분을 구현할 예정*/
-                
-                self.name.text = value
-            })
-            // 알림창 띄움
-            self.present(alert, animated: false, completion: nil)
-        }
     }
     
     @objc func dateChanged(_ sender: UIDatePicker) {
@@ -130,12 +142,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
 
 //MARK: - 프로필 이미지
 extension ProfileVC : UIImagePickerControllerDelegate {
-    func profileImgVDL() {
-        let image = UIImage(named: "account.jpg")
-        self.profileImg.image = image
-        self.profileImg.contentMode = .scaleAspectFill
-    }
-    
     func imgPicker(_ source : UIImagePickerController.SourceType) {
         let picker = UIImagePickerController()
         picker.sourceType = source
@@ -170,7 +176,7 @@ extension ProfileVC : UIImagePickerControllerDelegate {
         // 액션 시트 창 실행
         self.present(alert, animated: true)
     }
-            
+    
     // 이미지를 선택하면 이 메소드가 자동으로 호출된다.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {

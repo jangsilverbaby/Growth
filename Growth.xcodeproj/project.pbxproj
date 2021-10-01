@@ -29,6 +29,7 @@
 		F2BBA45626E63CB4002AD282 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2BBA45426E63CB4002AD282 /* LaunchScreen.storyboard */; };
 		F2BBA46126E63CB5002AD282 /* GrowthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46026E63CB5002AD282 /* GrowthTests.swift */; };
 		F2BBA46C26E63CB5002AD282 /* GrowthUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */; };
+		F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DD91982706C32600015F2C /* ProfileInfo.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		F2BBA46726E63CB5002AD282 /* GrowthUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GrowthUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthUITests.swift; sourceTree = "<group>"; };
 		F2BBA46D26E63CB5002AD282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F2DD91982706C32600015F2C /* ProfileInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProfileInfo.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 				F200FA7426EA4406004D59EE /* FrontData.swift */,
 				F200FA7626EA4492004D59EE /* FrontListVC.swift */,
 				F27C7C5826FEEF5D00543546 /* ProfileVC.swift */,
+				F2DD91982706C32600015F2C /* ProfileInfo.plist */,
 			);
 			path = Growth;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */,
 				F200FA6A26E9FCC9004D59EE /* food.HEIC in Resources */,
 				F200FA8126EA53AB004D59EE /* study.PNG in Resources */,
 				F2BBA45626E63CB4002AD282 /* LaunchScreen.storyboard in Resources */,

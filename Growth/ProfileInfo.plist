@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>profileImg</key>
+	<data></data>
+	<key>name</key>
+	<string></string>
+	<key>startDate</key>
+	<date>2021-10-01T04:17:53Z</date>
+	<key>isAlert</key>
+	<false/>
+	<key>alertCycle</key>
+	<string>2021-10-01T04:17:45Z</string>
+	<key>alertTime</key>
+	<date>2021-10-01T04:17:42Z</date>
+</dict>
+</plist>

@@ -11,18 +11,7 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     // 프로필 데이터를 저장할 배열 변수
-    let frontlist: [FrontData] = [
-        FrontData(frontImg: UIImage(named: "pet.JPG")!, name: "먼지"),
-        FrontData(frontImg: UIImage(named: "plants.HEIC")!, name: "오이"),
-        FrontData(frontImg: UIImage(named: "food.HEIC")!, name: "오늘의 음식"),
-        FrontData(frontImg: UIImage(named: "sky.HEIC")!, name: "오늘의 하늘"),
-        FrontData(frontImg: UIImage(named: "study.PNG")!, name: "공부 기록"),
-        FrontData(frontImg: UIImage(named: "question.JPG")!, name: "하루에 한 문제"),
-        FrontData(frontImg: UIImage(named: "phrase.JPG")!, name: "하루에 한 글귀"),
-        FrontData(frontImg: UIImage(named: "ootd.JPG")!, name: "OOTD"),
-        FrontData(frontImg: UIImage(named: "diary.HEIC")!, name: "나의 일기")
-    ]
-
+    var frontlist = [FrontData]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

@@ -23,6 +23,17 @@ class FrontVC: UIViewController {
         collectionView.delegate = self
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addProfile" {
+            let vc = segue.destination as! ProfileVC
+            vc.profileSegue = "addProfile"
+        }
+        
+        if segue.identifier == "editProfile" {
+            let vc = segue.destination as! ProfileVC
+            vc.profileSegue = "editProfile"
+        }
+    }
 }
 
 extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
