@@ -6,8 +6,7 @@
 //
 import UIKit
 
-class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate
-{
+class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
     @IBOutlet weak var name: UILabel! // 이름
@@ -24,22 +23,26 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationItem.title = "프로필"
         
         // 프로필 이미지
-        let image = UIImage(named: "account.jpg")
-        self.profileImg.image = image
-        self.profileImg.contentMode = .scaleAspectFill
+        profileImgVDL()
         
+        // 이름
+        
+        // 시작 날짜
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         startDate.inputView = datePicker
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        startDate.text = dateFormatter.string(from: Date())
         
+        // 알림 유무
         
-        cyclePicker.delegate = self
-        self.alertCycle.inputView = cyclePicker
+        // 알림 주기
+        alertCycleVDL()
         
         // 알림 주기 피커뷰의 툴 바
         let toolbar = UIToolbar()
@@ -53,11 +56,15 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.setItems([flexSpace, done], animated: true)
         
+        // 알림 시간
         // 알림 시간 피커뷰
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         alertTime.inputView = timePicker
-        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        alertTime.text = timeFormatter.string(from: Date())
+                
         // 알림 시간 피커뷰의 툴 바
         let toolbar1 = UIToolbar()
         toolbar1.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
@@ -70,49 +77,63 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         let flexSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar1.setItems([flexSpace1, done1], animated: true)
         
+        // 탭하면 피커뷰 닫음
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        
-        /* 데이터에 저장하는 부분을 구현할 예정*/
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        startDate.text = dateFormatter.string(from: Date())
-        
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        alertTime.text = timeFormatter.string(from: Date())
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
         view.endEditing(true)
     }
-    // 생성할 컴포넌트 개수 정의
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
+            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
+            // 입력 필드 추가
+            alert.addTextField() {
+                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
+            }
+            // 버튼 및 액션 추가
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                let value = alert.textFields?[0].text
+                
+                /* 데이터에 저장하는 부분을 구현할 예정*/
+                
+                self.name.text = value
+            })
+            // 알림창 띄움
+            self.present(alert, animated: false, completion: nil)
+        }
     }
     
-    // 지정된 컴포넌트가 가길 목록의 길이 정의
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.cycleList.count
-    }
-    
-    // 지정된 컴포넌트의 목록 각 행에 출력될 내용 정의
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.cycleList[row]
-    }
-    
-    // 지정된 컴포넌트 목록 각 행을 사용자가 선택했을 때 실행할 액션 정의
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let cycle = self.cycleList[row]
-        self.alertCycle.text = cycle
-    }
-    
-    // 주기 입력 후에 실행될 코드
-    @objc func alertCycleDone(_ sender : Any) {
-        self.view.endEditing(true)
+    @objc func dateChanged(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        startDate.text = dateFormatter.string(from: sender.date)
         
         /* 데이터에 저장하는 부분을 구현할 예정*/
+        
+        view.endEditing(true)
+    }
+    
+    @objc func timeChanged() {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        alertTime.text = timeFormatter.string(from: timePicker.date)
+        
+        /* 데이터에 저장하는 부분을 구현할 예정*/
+        
+        view.endEditing(true)
+    }
+}
+
+//MARK: - 프로필 이미지
+extension ProfileVC : UIImagePickerControllerDelegate {
+    func profileImgVDL() {
+        let image = UIImage(named: "account.jpg")
+        self.profileImg.image = image
+        self.profileImg.contentMode = .scaleAspectFill
     }
     
     func imgPicker(_ source : UIImagePickerController.SourceType) {
@@ -161,44 +182,40 @@ class ProfileVC : UITableViewController, UIPickerViewDelegate, UIPickerViewDataS
         // 이 구문을 누락하면 이미지 피커 컨트롤러 창은 닫히지 않는다.
         picker.dismiss(animated: true)
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
-            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
-            // 입력 필드 추가
-            alert.addTextField() {
-                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
-            }
-            // 버튼 및 액션 추가
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-                let value = alert.textFields?[0].text
-                
-                /* 데이터에 저장하는 부분을 구현할 예정*/
-                
-                self.name.text = value
-            })
-            // 알림창 띄움
-            self.present(alert, animated: false, completion: nil)
-        }
+}
+
+//MARK: - 알림 주기
+extension ProfileVC : UIPickerViewDelegate, UIPickerViewDataSource {
+    func alertCycleVDL() {
+        cyclePicker.delegate = self
+        self.alertCycle.inputView = cyclePicker
     }
     
-    @objc func dateChanged(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        startDate.text = dateFormatter.string(from: sender.date)
-        
-        /* 데이터에 저장하는 부분을 구현할 예정*/
-        
-        view.endEditing(true)
+    // 생성할 컴포넌트 개수 정의
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
     
-    @objc func timeChanged() {
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        alertTime.text = timeFormatter.string(from: timePicker.date)
+    // 지정된 컴포넌트가 가길 목록의 길이 정의
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return self.cycleList.count
+    }
+    
+    // 지정된 컴포넌트의 목록 각 행에 출력될 내용 정의
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return self.cycleList[row]
+    }
+    
+    // 지정된 컴포넌트 목록 각 행을 사용자가 선택했을 때 실행할 액션 정의
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let cycle = self.cycleList[row]
+        self.alertCycle.text = cycle
+    }
+    
+    // 주기 입력 후에 실행될 코드
+    @objc func alertCycleDone(_ sender : Any) {
+        self.view.endEditing(true)
         
         /* 데이터에 저장하는 부분을 구현할 예정*/
-        
-        view.endEditing(true)
     }
 }
