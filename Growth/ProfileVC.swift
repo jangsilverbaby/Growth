@@ -19,7 +19,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var defaultPList : NSDictionary!
     var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
     var profileSegue = ""
-    let index = 0
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
     
     var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "삼 년"]
     
@@ -35,14 +36,14 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
         }
         
-        let customPlist = "\(index).plist" // 읽어올 파일명
+        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = paths[0] as NSString
         let clist = path.strings(byAppendingPaths: [customPlist]).first!
-        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary()
-        
-        self.profileImg.image = UIImage(named: data["profileImg"] as? String ?? "account.jpg")
+        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
+        print("custom plist=\(clist)")
+        self.profileImg.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
         self.name.text = data["name"] as? String
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
@@ -150,13 +151,15 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     @IBAction func done(_ sender: Any) {
         let i = self.frontlist.count
-        self.frontlist.append(i)
+        if appDelegate.index == i {
+            self.frontlist.append(i)
+        }
         
         let plist = UserDefaults.standard
         plist.set(self.frontlist, forKey: "frontlist")
         plist.synchronize()
         
-        let customPlist = "\(i).plist" // 읽어올 파일명
+        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = paths[0] as NSString

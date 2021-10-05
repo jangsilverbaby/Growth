@@ -13,11 +13,13 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
 
     var defaultPList : NSDictionary!
     var frontlist = [Int]()
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
     @IBOutlet weak var collectionView: UICollectionView!
     
     let addProfile = "addProfile"
+    let editProfile = "editProfile"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,11 +53,12 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         if segue.identifier == addProfile {
             let vc = segue.destination as! ProfileVC
             vc.profileSegue = addProfile
+            self.appDelegate.index = self.frontlist.count
         }
         
-        if segue.identifier == "editProfile" {
+        if segue.identifier == editProfile {
             let vc = segue.destination as! ProfileVC
-            vc.profileSegue = "editProfile"
+            vc.profileSegue = editProfile
         }
     }
     
@@ -75,12 +78,11 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         let plist = path.strings(byAppendingPaths: [customPlist]).first!
         let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary(dictionary: self.defaultPList)
         
-        cell.frontImgView.image = UIImage(data: data["profileImg"] as! Data)
+        cell.frontImgView.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
         cell.frontImgView.contentMode = .scaleAspectFill
         cell.frontImgView.layer.cornerRadius = 5.0
         cell.nameLabel.text = data["name"] as? String
         cell.editBtn.tag = indexPath.item
-        
         
         return cell
     }
@@ -114,7 +116,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
+        print(indexPath.item)
     }
 }
 

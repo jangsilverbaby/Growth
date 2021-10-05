@@ -10,7 +10,9 @@ import UIKit
 class FrontCell: UICollectionViewCell {
     @IBOutlet weak var frontImgView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var editBtn: UIButton!
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var cornerRadius: CGFloat = 5.0
     
     override func awakeFromNib() {
@@ -24,5 +26,9 @@ class FrontCell: UICollectionViewCell {
             // from being clipped to the corner radius
             layer.cornerRadius = cornerRadius
             layer.masksToBounds = false
+    }
+    
+    @IBAction func editBtnPressed(_ sender: Any) {
+        appDelegate.index = self.editBtn.tag
     }
 }

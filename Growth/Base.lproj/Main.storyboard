@@ -40,6 +40,9 @@
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p3W-ex-N5C">
                                                     <rect key="frame" x="8" y="170" width="135" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="iiB-wc-f5N"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -54,6 +57,7 @@
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
                                                     <connections>
+                                                        <action selector="editBtnPressed:" destination="1OQ-Ta-Ubm" eventType="touchUpInside" id="3a7-cy-0h8"/>
                                                         <segue destination="Ukz-lz-nAV" kind="show" identifier="editProfile" id="xBy-pn-65E"/>
                                                     </connections>
                                                 </button>
@@ -73,7 +77,7 @@
                                         <color key="backgroundColor" red="0.70980392156862748" green="0.87058823529411766" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <size key="customSize" width="180" height="199"/>
                                         <connections>
-                                            <outlet property="editBtn" destination="da0-F3-k0m" id="kE2-NJ-FZb"/>
+                                            <outlet property="editBtn" destination="da0-F3-k0m" id="gKV-Ug-uLB"/>
                                             <outlet property="frontImgView" destination="yvq-AS-yaU" id="mhy-oX-fX1"/>
                                             <outlet property="nameLabel" destination="p3W-ex-N5C" id="hTm-Nk-ODO"/>
                                         </connections>
