@@ -17,7 +17,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
     var defaultPList : NSDictionary!
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
     var profileSegue = ""
     let index = 0
     
@@ -149,11 +149,11 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     @IBAction func done(_ sender: Any) {
-        let i = appDelegate.frontlist.count
-        self.appDelegate.frontlist.append(i)
+        let i = self.frontlist.count
+        self.frontlist.append(i)
         
         let plist = UserDefaults.standard
-        plist.set(self.appDelegate.frontlist, forKey: "frontlist")
+        plist.set(self.frontlist, forKey: "frontlist")
         plist.synchronize()
         
         let customPlist = "\(i).plist" // 읽어올 파일명

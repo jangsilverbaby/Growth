@@ -9,24 +9,48 @@ import UIKit
 
 // UICollectionViewDataSource : 컬렉션 뷰의 셀은 총 몇 개?
 // UICollectionViewDelegate : 컬렉션 뷰를 어떻게 보여줄 것인가?
-class FrontVC: UIViewController {
-    // 앱 델리게이트 객체의 참조 정보를 읽어온다.
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
+class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    var defaultPList : NSDictionary!
+    var frontlist = [Int]()
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    let addProfile = "addProfile"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        let plist = UserDefaults.standard
+        if let list = plist.array(forKey: "frontlist") as? [Int]{
+            self.frontlist = list
+        } else {
+            plist.setValue(self.frontlist, forKey: "frontlist")
+        }
+        
+        
+        if let defaultPListPath = Bundle.main.path(forResource: "ProfileInfo", ofType: "plist") {
+            self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let plist = UserDefaults.standard
+        if let list = plist.array(forKey: "frontlist") as? [Int]{
+            self.frontlist = list
+        } else {
+            plist.setValue(self.frontlist, forKey: "frontlist")
+        }
+        collectionView.reloadData()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "addProfile" {
+        if segue.identifier == addProfile {
             let vc = segue.destination as! ProfileVC
-            vc.profileSegue = "addProfile"
+            vc.profileSegue = addProfile
         }
         
         if segue.identifier == "editProfile" {
@@ -34,23 +58,29 @@ class FrontVC: UIViewController {
             vc.profileSegue = "editProfile"
         }
     }
-}
-
-extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
     // 컬렉션 뷰에 총 몇개의 벳울 표시할 것인가
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return appDelegate.frontlist.count
+        return self.frontlist.count
     }
     
     // 해당 cell에 무슨 셀을 표시할 지 결정
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = appDelegate.frontlist[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "frontCell", for: indexPath) as! FrontCell
         
-        cell.frontImgView.image = item.frontImg
+        let customPlist = "\(indexPath.row).plist" // 읽어올 파일명
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] as NSString
+        let plist = path.strings(byAppendingPaths: [customPlist]).first!
+        let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary(dictionary: self.defaultPList)
+        
+        cell.frontImgView.image = UIImage(data: data["profileImg"] as! Data)
         cell.frontImgView.contentMode = .scaleAspectFill
         cell.frontImgView.layer.cornerRadius = 5.0
-        cell.nameLabel.text = item.name
+        cell.nameLabel.text = data["name"] as? String
+        cell.editBtn.tag = indexPath.item
+        
         
         return cell
     }
@@ -86,6 +116,6 @@ extension FrontVC: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
     }
-    
-    
 }
+
+
