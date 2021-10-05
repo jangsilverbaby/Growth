@@ -175,14 +175,12 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.setValue(self.name.text, forKey: "name")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
-        dateFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone?
         let startDate = dateFormatter.date(from: self.startDate.text!)!
         data.setValue(startDate, forKey: "startDate")
         data.setValue(self.isAlert.isOn, forKey: "isAlert")
         data.setValue(self.alertCycle.text, forKey: "alertCycle")
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
-        timeFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone?
         let alertTime = timeFormatter.date(from: self.alertTime.text!)
         data.setValue(alertTime, forKey: "alertTime")
         data.write(toFile: clist, atomically: true)
