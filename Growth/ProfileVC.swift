@@ -9,6 +9,7 @@ import UIKit
 class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
+    @IBOutlet weak var name: UILabel!
     @IBOutlet weak var startDate: UITextField! // 시작 날짜
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
@@ -18,6 +19,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var defaultPList : NSDictionary!
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var profileSegue = ""
+    let index = 0
     
     var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "삼 년"]
     
@@ -33,33 +35,37 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
         }
         
-        // 이름
+        let customPlist = "\(index).plist" // 읽어올 파일명
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] as NSString
+        let clist = path.strings(byAppendingPaths: [customPlist]).first!
+        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary()
+        
+        self.profileImg.image = UIImage(named: data["profileImg"] as? String ?? "account.jpg")
+        self.name.text = data["name"] as? String
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        self.startDate.text = dateFormatter.string(from: data["startDate"] as? Date ?? Date())
+        self.isAlert.isOn = data["isAlert"] as? Bool ?? false
+        self.alertCycle.text = data["alertCycle"] as? String
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        self.alertTime.text = timeFormatter.string(from: data["alertTime"] as? Date ?? Date())
+        
+        
+        // 추가
         if profileSegue == "addProfile" {
-            let alert = UIAlertController(title: "이름을 입력해하세요", message: "입력 완료 후 이름을 변경할 수 없습니다.", preferredStyle: .alert)
-            alert.addTextField()
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-                if let name = alert.textFields?[0].text {
-                    self.appDelegate.frontlist.append(FrontData(frontImg: UIImage(named: "account.jpg")!, name: name))
-                    
-                    self.profileImg.image = UIImage(named: "account.jpg")
-                    self.self.navigationItem.title = name
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy.MM.dd"
-                    self.startDate.text = dateFormatter.string(from: Date())
-                    self.isAlert.isOn = false
-                    self.alertCycle.text = "하루"
-                    let timeFormatter = DateFormatter()
-                    timeFormatter.dateFormat = "hh:mm a"
-                    self.alertTime.text = timeFormatter.string(from: Date())
-                    
-                    let plist = UserDefaults.standard
-                    plist.set(self.appDelegate.frontlist, forKey: "frontlist")
-                    plist.set(name, forKey: "selectedName")
-                    plist.synchronize()
-                }
-            })
-            
-            self.present(alert, animated: false, completion: nil)
+            self.profileImg.image = UIImage(named: "account.jpg")
+            self.name.text = ""
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd"
+            self.startDate.text = dateFormatter.string(from: Date())
+            self.isAlert.isOn = true
+            self.alertCycle.text = "하루"
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "hh:mm a"
+            self.alertTime.text = timeFormatter.string(from: Date())
         }
         
         // 시작 날짜
@@ -67,9 +73,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         datePicker.preferredDatePickerStyle = .inline
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         startDate.inputView = datePicker
-
-        
-        // 알림 유무
         
         // 알림 주기
         alertCycleVDL()
@@ -108,24 +111,33 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
-        
-        // 불러온 값을 설정
-        //self.profileImg.image = UIImage(data: plist.data(forKey: "profileImg")!)
-        //self.name.text = plist.string(forKey: "name")
-        
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
+            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
+            // 입력 필드 추가
+            alert.addTextField() {
+                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
+            }
+            // 버튼 및 액션 추가
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                let value = alert.textFields?[0].text
+                self.name.text = value
+            })
+            // 알림창 띄움
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+    
     @objc func dateChanged(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         startDate.text = dateFormatter.string(from: sender.date)
-        
-        /* 데이터에 저장하는 부분을 구현할 예정*/
-        
         view.endEditing(true)
     }
     
@@ -133,10 +145,43 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
         alertTime.text = timeFormatter.string(from: timePicker.date)
-        
-        /* 데이터에 저장하는 부분을 구현할 예정*/
-        
         view.endEditing(true)
+    }
+    
+    @IBAction func done(_ sender: Any) {
+        let i = appDelegate.frontlist.count
+        self.appDelegate.frontlist.append(i)
+        
+        let plist = UserDefaults.standard
+        plist.set(self.appDelegate.frontlist, forKey: "frontlist")
+        plist.synchronize()
+        
+        let customPlist = "\(i).plist" // 읽어올 파일명
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] as NSString
+        let clist = path.strings(byAppendingPaths: [customPlist]).first!
+        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
+        
+        let image = self.profileImg.image
+        let profileData = image?.pngData()
+        data.setValue(profileData, forKey: "profileImg")
+        data.setValue(self.name.text, forKey: "name")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone?
+        let startDate = dateFormatter.date(from: self.startDate.text!)!
+        data.setValue(startDate, forKey: "startDate")
+        data.setValue(self.isAlert.isOn, forKey: "isAlert")
+        data.setValue(self.alertCycle.text, forKey: "alertCycle")
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        timeFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone?
+        let alertTime = timeFormatter.date(from: self.alertTime.text!)
+        data.setValue(alertTime, forKey: "alertTime")
+        data.write(toFile: clist, atomically: true)
+        
+        print("custom plist=\(clist)")
     }
 }
 
