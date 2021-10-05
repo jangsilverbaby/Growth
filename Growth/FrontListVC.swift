@@ -89,17 +89,17 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             let width = collectionView.frame.width
-            let height = collectionView.frame.height
+            //let height = collectionView.frame.height
             
             let itemsPerRow: CGFloat = 2
             let widthPadding = sectionInsets.left * (itemsPerRow + 1)
-            let itemsPerColumn: CGFloat = 3
-            let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
+            //let itemsPerColumn: CGFloat = 3
+           // let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
             
             let cellWidth = (width - widthPadding) / itemsPerRow
-            let cellHeight = (height - heightPadding) / itemsPerColumn
+            //let cellHeight = (height - heightPadding) / itemsPerColumn
         
-            return CGSize(width: cellWidth, height: cellHeight)
+            return CGSize(width: cellWidth, height: cellWidth)
         }
     
     func collectionView(_ collectionView: UICollectionView,
