@@ -182,6 +182,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.write(toFile: clist, atomically: true)
         
         print("custom plist=\(clist)")
+        
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
