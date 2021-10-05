@@ -14,6 +14,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
     @IBOutlet weak var alertTime: UITextField! // 알림 시간
+    @IBOutlet weak var deleteBtn: UIButton!
     
     // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
     var defaultPList : NSDictionary!
@@ -67,6 +68,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "hh:mm a"
             self.alertTime.text = timeFormatter.string(from: Date())
+            
+            self.deleteBtn.isHidden = true
         }
         
         // 시작 날짜
@@ -187,6 +190,19 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         print("custom plist=\(clist)")
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func deleteBtnPressed(_ sender: Any) {
+        let alert = UIAlertController(title: "프로필을 삭제하시겠습니까?", message: "OK 버튼을 누르면 프로필이 완전히 삭제됩니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+            self.frontlist.remove(at: self.appDelegate.index)
+            let plist = UserDefaults.standard
+            plist.set(self.frontlist, forKey: "frontlist")
+            plist.synchronize()
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        self.present(alert, animated: false, completion: nil)
     }
 }
 

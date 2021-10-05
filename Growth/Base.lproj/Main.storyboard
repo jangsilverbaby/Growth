@@ -132,6 +132,9 @@
                                     <state key="normal" title="이 프로필 삭제하기">
                                         <color key="titleColor" systemColor="systemRedColor"/>
                                     </state>
+                                    <connections>
+                                        <action selector="deleteBtnPressed:" destination="Ukz-lz-nAV" eventType="touchUpInside" id="ZnA-Zw-4zU"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -305,6 +308,7 @@
                     <connections>
                         <outlet property="alertCycle" destination="keH-rB-yd9" id="42f-bN-A1L"/>
                         <outlet property="alertTime" destination="IPL-Sw-J8q" id="6e5-h7-sMY"/>
+                        <outlet property="deleteBtn" destination="yHR-lg-k8b" id="lw6-NN-skV"/>
                         <outlet property="isAlert" destination="2kf-RI-XZX" id="ooE-Qn-v1Y"/>
                         <outlet property="name" destination="wrO-wC-Alw" id="n4Q-Nw-Dyt"/>
                         <outlet property="profileImg" destination="l4f-6g-b62" id="5Iu-qF-kV9"/>
