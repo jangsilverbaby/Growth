@@ -53,7 +53,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         if segue.identifier == addProfile {
             let vc = segue.destination as! ProfileVC
             vc.profileSegue = addProfile
-            self.appDelegate.index = self.frontlist.count
+            self.appDelegate.index = frontlist[frontlist.count-1] + 1
         }
         
         if segue.identifier == editProfile {
@@ -71,7 +71,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "frontCell", for: indexPath) as! FrontCell
         
-        let customPlist = "\(indexPath.row).plist" // 읽어올 파일명
+        let customPlist = "\(frontlist[indexPath.item]).plist" // 읽어올 파일명
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = paths[0] as NSString
@@ -82,7 +82,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         cell.frontImgView.contentMode = .scaleAspectFill
         cell.frontImgView.layer.cornerRadius = 5.0
         cell.nameLabel.text = data["name"] as? String
-        cell.editBtn.tag = indexPath.item
+        cell.editBtn.tag = frontlist[indexPath.item]
         
         return cell
     }
@@ -116,7 +116,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.item)
+        print(frontlist[indexPath.item])
     }
 }
 

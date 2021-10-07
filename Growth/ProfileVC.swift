@@ -153,7 +153,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     @IBAction func done(_ sender: Any) {
-        let i = self.frontlist.count
+        let i = frontlist[frontlist.count-1] + 1
         if appDelegate.index == i {
             self.frontlist.append(i)
         }
@@ -185,15 +185,13 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.setValue(alertTime, forKey: "alertTime")
         data.write(toFile: clist, atomically: true)
         
-        print("custom plist=\(clist)")
-        
         self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func deleteBtnPressed(_ sender: Any) {
         let alert = UIAlertController(title: "프로필을 삭제하시겠습니까?", message: "OK 버튼을 누르면 프로필이 완전히 삭제됩니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-            self.frontlist.remove(at: self.appDelegate.index)
+            self.frontlist.remove(at: self.frontlist.firstIndex(of: self.appDelegate.index)!)
             let plist = UserDefaults.standard
             plist.set(self.frontlist, forKey: "frontlist")
             plist.synchronize()
