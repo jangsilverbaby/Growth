@@ -262,6 +262,9 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="y8K-Zt-XfW"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <action selector="isAlertChanged:" destination="Ukz-lz-nAV" eventType="valueChanged" id="6Tz-CN-R1R"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -284,7 +287,6 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알림 주기" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZMF-1A-fPB">
                                                     <rect key="frame" x="20" y="12" width="64" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="하루" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="keH-rB-yd9">
@@ -356,12 +358,15 @@
                     <connections>
                         <outlet property="alertCycle" destination="keH-rB-yd9" id="42f-bN-A1L"/>
                         <outlet property="alertTime" destination="IPL-Sw-J8q" id="6e5-h7-sMY"/>
+                        <outlet property="cycleLabel" destination="ZMF-1A-fPB" id="p1g-6d-41h"/>
                         <outlet property="deleteBtn" destination="yHR-lg-k8b" id="lw6-NN-skV"/>
                         <outlet property="isAlert" destination="2kf-RI-XZX" id="ooE-Qn-v1Y"/>
+                        <outlet property="isAlertLabel" destination="ddJ-eF-ump" id="adO-Jq-Kj5"/>
                         <outlet property="name" destination="wrO-wC-Alw" id="n4Q-Nw-Dyt"/>
                         <outlet property="profileImg" destination="l4f-6g-b62" id="5Iu-qF-kV9"/>
                         <outlet property="profileImgEditBtn" destination="ACK-mr-2lq" id="rjC-3c-sJd"/>
                         <outlet property="startDate" destination="un7-CN-uof" id="XQ2-ed-9sb"/>
+                        <outlet property="timeLabel" destination="kBx-gz-t61" id="7hL-w4-PgP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ksj-6h-sIB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

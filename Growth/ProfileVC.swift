@@ -15,6 +15,9 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
     @IBOutlet weak var alertTime: UITextField! // 알림 시간
     @IBOutlet weak var deleteBtn: UIButton!
+    @IBOutlet weak var isAlertLabel: UILabel!
+    @IBOutlet weak var cycleLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     
     // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
     var defaultPList : NSDictionary!
@@ -143,6 +146,26 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         dateFormatter.dateFormat = "yyyy.MM.dd"
         startDate.text = dateFormatter.string(from: sender.date)
         view.endEditing(true)
+    }
+    
+    @IBAction func isAlertChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            self.isAlertLabel.textColor = .label
+            self.cycleLabel.textColor = .label
+            self.timeLabel.textColor = .label
+            self.alertCycle.textColor = .label
+            self.alertTime.textColor = .label
+            self.alertCycle.isEnabled = true
+            self.alertTime.isEnabled = true
+        } else {
+            self.isAlertLabel.textColor = .opaqueSeparator
+            self.cycleLabel.textColor = .opaqueSeparator
+            self.timeLabel.textColor = .opaqueSeparator
+            self.alertCycle.textColor = .opaqueSeparator
+            self.alertTime.textColor = .opaqueSeparator
+            self.alertCycle.isEnabled = false
+            self.alertTime.isEnabled = false
+        }
     }
     
     @objc func timeChanged() {
