@@ -20,11 +20,16 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     let addProfile = "addProfile"
     let editProfile = "editProfile"
+    
+    let userNotificationCenter = UNUserNotificationCenter.current()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        requestNotificationAuthorization()
+        sendNotification(seconds: 60)
         
         let plist = UserDefaults.standard
         if let list = plist.array(forKey: "frontlist") as? [Int]{
@@ -120,4 +125,35 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
 }
 
+//MARK: - 알림
+extension FrontListVC {
+    // 사용자에게 알림 권한 요청
+    func requestNotificationAuthorization() {
+        let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .badge, .sound)
+        userNotificationCenter.requestAuthorization(options: authOptions) { success, error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
+    }
+    
+    // 알림 전송
+    func sendNotification(seconds: Double) {
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "알림 테스트"
+        notificationContent.body = "이것은 알림을 테스트 하는 것이다"
+        notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: true)
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: notificationContent,
+                                            trigger: trigger)
+        
+        userNotificationCenter.add(request) { error in
+            if let error = error {
+                print("Notification Error: ", error)
+            }
+        }
+    }
+}
 
