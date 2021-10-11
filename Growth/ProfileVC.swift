@@ -24,7 +24,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
     var profileSegue = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-
     
     var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "삼 년"]
     
@@ -66,7 +65,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd"
             self.startDate.text = dateFormatter.string(from: Date())
-            self.isAlert.isOn = true
+            self.isAlert.isOn = false
             self.alertCycle.text = "하루"
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "hh:mm a"
@@ -150,7 +149,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     @IBAction func isAlertChanged(_ sender: UISwitch) {
         if sender.isOn {
-            self.isAlertLabel.textColor = .label
             self.cycleLabel.textColor = .label
             self.timeLabel.textColor = .label
             self.alertCycle.textColor = .label
@@ -158,7 +156,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             self.alertCycle.isEnabled = true
             self.alertTime.isEnabled = true
         } else {
-            self.isAlertLabel.textColor = .opaqueSeparator
             self.cycleLabel.textColor = .opaqueSeparator
             self.timeLabel.textColor = .opaqueSeparator
             self.alertCycle.textColor = .opaqueSeparator
