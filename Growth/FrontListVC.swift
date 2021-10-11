@@ -58,7 +58,12 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         if segue.identifier == addProfile {
             let vc = segue.destination as! ProfileVC
             vc.profileSegue = addProfile
-            self.appDelegate.index = frontlist[frontlist.count-1] + 1
+            let last = frontlist.count-1
+            if last < 0 {
+                self.appDelegate.index = 0
+            } else {
+                self.appDelegate.index = frontlist[last] + 1
+            }
         }
         
         if segue.identifier == editProfile {

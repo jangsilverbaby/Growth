@@ -96,7 +96,11 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     @IBAction func done(_ sender: Any) {
-        let i = frontlist[frontlist.count-1] + 1
+        let last = frontlist.count-1
+        var i = 0
+        if last >= 0 {
+            i = frontlist[last] + 1
+        }
         if appDelegate.index == i {
             self.frontlist.append(i)
         }
