@@ -21,6 +21,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
     var defaultPList : NSDictionary!
+    // 프로필 리스트
     var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
     var profileSegue = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -57,7 +58,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         timeFormatter.dateFormat = "hh:mm a"
         self.alertTime.text = timeFormatter.string(from: data["alertTime"] as? Date ?? Date())
         
-        
         // 추가
         if profileSegue == "addProfile" {
             self.profileImg.image = UIImage(named: "account.jpg")
@@ -75,43 +75,13 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         }
         
         // 시작 날짜
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .inline
-        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        startDate.inputView = datePicker
+        startDateVDL()
         
         // 알림 주기
         alertCycleVDL()
-        
-        // 알림 주기 피커뷰의 툴 바
-        let toolbar = UIToolbar()
-        toolbar.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
-        toolbar.barTintColor = .lightGray
-        self.alertCycle.inputAccessoryView = toolbar
-        let done = UIBarButtonItem()
-        done.title = "Done"
-        done.target = self
-        done.action = #selector(alertCycleDone)
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbar.setItems([flexSpace, done], animated: true)
-        
+
         // 알림 시간
-        // 알림 시간 피커뷰
-        timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .wheels
-        alertTime.inputView = timePicker
-        
-        // 알림 시간 피커뷰의 툴 바
-        let toolbar1 = UIToolbar()
-        toolbar1.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
-        toolbar1.barTintColor = .lightGray
-        self.alertTime.inputAccessoryView = toolbar1
-        let done1 = UIBarButtonItem()
-        done1.title = "Done"
-        done1.target = self
-        done1.action = #selector(timeChanged)
-        let flexSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbar1.setItems([flexSpace1, done1], animated: true)
+        alertTimeVDL()
         
         // 탭하면 피커뷰 닫음
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
@@ -120,55 +90,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
-        view.endEditing(true)
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
-            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
-            // 입력 필드 추가
-            alert.addTextField() {
-                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
-            }
-            // 버튼 및 액션 추가
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-                let value = alert.textFields?[0].text
-                self.name.text = value
-            })
-            // 알림창 띄움
-            self.present(alert, animated: false, completion: nil)
-        }
-    }
-    
-    @objc func dateChanged(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        startDate.text = dateFormatter.string(from: sender.date)
-        view.endEditing(true)
-    }
-    
-    @IBAction func isAlertChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            self.cycleLabel.textColor = .label
-            self.timeLabel.textColor = .label
-            self.alertCycle.textColor = .label
-            self.alertTime.textColor = .label
-            self.alertCycle.isEnabled = true
-            self.alertTime.isEnabled = true
-        } else {
-            self.cycleLabel.textColor = .opaqueSeparator
-            self.timeLabel.textColor = .opaqueSeparator
-            self.alertCycle.textColor = .opaqueSeparator
-            self.alertTime.textColor = .opaqueSeparator
-            self.alertCycle.isEnabled = false
-            self.alertTime.isEnabled = false
-        }
-    }
-    
-    @objc func timeChanged() {
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        alertTime.text = timeFormatter.string(from: timePicker.date)
         view.endEditing(true)
     }
     
@@ -271,12 +192,80 @@ extension ProfileVC : UIImagePickerControllerDelegate {
         picker.dismiss(animated: true)
     }
 }
+//MARK: - 이름
+extension ProfileVC {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
+            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
+            // 입력 필드 추가
+            alert.addTextField() {
+                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
+            }
+            // 버튼 및 액션 추가
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                let value = alert.textFields?[0].text
+                self.name.text = value
+            })
+            // 알림창 띄움
+            self.present(alert, animated: false, completion: nil)
+        }
+    }
+}
+
+//MARK: - 시작 날짜
+extension ProfileVC {
+    func startDateVDL() {
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .inline
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        startDate.inputView = datePicker
+    }
+    
+    @objc func dateChanged(_ sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        startDate.text = dateFormatter.string(from: sender.date)
+        view.endEditing(true)
+    }
+}
+
+//MARK: - 알림 여부
+extension ProfileVC {
+    @IBAction func isAlertChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            self.cycleLabel.textColor = .label
+            self.timeLabel.textColor = .label
+            self.alertCycle.textColor = .label
+            self.alertTime.textColor = .label
+            self.alertCycle.isEnabled = true
+            self.alertTime.isEnabled = true
+        } else {
+            self.cycleLabel.textColor = .opaqueSeparator
+            self.timeLabel.textColor = .opaqueSeparator
+            self.alertCycle.textColor = .opaqueSeparator
+            self.alertTime.textColor = .opaqueSeparator
+            self.alertCycle.isEnabled = false
+            self.alertTime.isEnabled = false
+        }
+    }
+}
 
 //MARK: - 알림 주기
 extension ProfileVC : UIPickerViewDelegate, UIPickerViewDataSource {
     func alertCycleVDL() {
         cyclePicker.delegate = self
         self.alertCycle.inputView = cyclePicker
+        
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
+        toolbar.barTintColor = .lightGray
+        self.alertCycle.inputAccessoryView = toolbar
+        let done = UIBarButtonItem()
+        done.title = "Done"
+        done.target = self
+        done.action = #selector(alertCycleDone)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.setItems([flexSpace, done], animated: true)
     }
     
     // 생성할 컴포넌트 개수 정의
@@ -305,5 +294,33 @@ extension ProfileVC : UIPickerViewDelegate, UIPickerViewDataSource {
         self.view.endEditing(true)
         
         /* 데이터에 저장하는 부분을 구현할 예정*/
+    }
+}
+
+//MARK: - 알림 시간
+extension ProfileVC {
+    func alertTimeVDL() {
+        timePicker.datePickerMode = .time
+        timePicker.preferredDatePickerStyle = .wheels
+        alertTime.inputView = timePicker
+        
+        // 알림 시간 피커뷰의 툴 바
+        let toolbar1 = UIToolbar()
+        toolbar1.frame = CGRect(x: 0, y: 0, width: 0, height: 36)
+        toolbar1.barTintColor = .lightGray
+        self.alertTime.inputAccessoryView = toolbar1
+        let done1 = UIBarButtonItem()
+        done1.title = "Done"
+        done1.target = self
+        done1.action = #selector(timeChanged)
+        let flexSpace1 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar1.setItems([flexSpace1, done1], animated: true)
+    }
+    
+    @objc func timeChanged() {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        alertTime.text = timeFormatter.string(from: timePicker.date)
+        view.endEditing(true)
     }
 }
