@@ -53,6 +53,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         dateFormatter.dateFormat = "yyyy.MM.dd"
         self.startDate.text = dateFormatter.string(from: data["startDate"] as? Date ?? Date())
         self.isAlert.isOn = data["isAlert"] as? Bool ?? false
+        isAlertColor(self.isAlert)
         self.alertCycle.text = data["alertCycle"] as? String
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
@@ -66,6 +67,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             dateFormatter.dateFormat = "yyyy.MM.dd"
             self.startDate.text = dateFormatter.string(from: Date())
             self.isAlert.isOn = false
+            isAlertColor(self.isAlert)
             self.alertCycle.text = "하루"
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "hh:mm a"
@@ -232,6 +234,24 @@ extension ProfileVC {
 //MARK: - 알림 여부
 extension ProfileVC {
     @IBAction func isAlertChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            self.cycleLabel.textColor = .label
+            self.timeLabel.textColor = .label
+            self.alertCycle.textColor = .label
+            self.alertTime.textColor = .label
+            self.alertCycle.isEnabled = true
+            self.alertTime.isEnabled = true
+        } else {
+            self.cycleLabel.textColor = .opaqueSeparator
+            self.timeLabel.textColor = .opaqueSeparator
+            self.alertCycle.textColor = .opaqueSeparator
+            self.alertTime.textColor = .opaqueSeparator
+            self.alertCycle.isEnabled = false
+            self.alertTime.isEnabled = false
+        }
+    }
+    
+    func isAlertColor(_ sender: UISwitch) {
         if sender.isOn {
             self.cycleLabel.textColor = .label
             self.timeLabel.textColor = .label
