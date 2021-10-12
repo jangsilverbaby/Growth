@@ -32,6 +32,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     let cyclePicker = UIPickerView() // 알림 주기 피커뷰
     let timePicker = UIDatePicker() // 알림 시간 피커뷰
     
+    let userNotificationCenter = UNUserNotificationCenter.current()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -131,6 +133,23 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let alertTime = timeFormatter.date(from: self.alertTime.text!)
         data.setValue(alertTime, forKey: "alertTime")
         data.write(toFile: clist, atomically: true)
+        
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
+        //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
+        
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: notificationContent,
+                                            trigger: trigger)
+        
+        userNotificationCenter.add(request) { error in
+            if let error = error {
+                print("Notification Error: ", error)
+            }
+        }
         
         self.navigationController?.popViewController(animated: true)
     }
