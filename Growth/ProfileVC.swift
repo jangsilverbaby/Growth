@@ -134,21 +134,10 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.setValue(alertTime, forKey: "alertTime")
         data.write(toFile: clist, atomically: true)
         
-        let notificationContent = UNMutableNotificationContent()
-        notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
-        //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
-        
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: alertTime!)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString,
-                                            content: notificationContent,
-                                            trigger: trigger)
-        
-        userNotificationCenter.add(request) { error in
-            if let error = error {
-                print("Notification Error: ", error)
-            }
+        if self.isAlert.isOn {
+            alert(alertTime)
+        } else {
+            cancelAlert()
         }
         
         self.navigationController?.popViewController(animated: true)
@@ -290,6 +279,30 @@ extension ProfileVC {
             self.alertCycle.isEnabled = false
             self.alertTime.isEnabled = false
         }
+    }
+    
+    func alert(_ alertTime: Date?){
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
+        //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
+        
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: "\(appDelegate.index)",
+                                            content: notificationContent,
+                                            trigger: trigger)
+        
+        userNotificationCenter.add(request) { error in
+            if let error = error {
+                print("Notification Error: ", error)
+            }
+        }
+    }
+    
+    func cancelAlert() {
+        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(appDelegate.index)"])
+        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(appDelegate.index)"])
     }
 }
 
