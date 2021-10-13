@@ -26,7 +26,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var profileSegue = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    var cycleList = ["하루", "삼 일", "일주일", "한 달", "일 년", "삼 년"]
+    var cycleList = ["매일", "일주일에 한 번", "한 달에 한 번", "일 년에 한 번"]
+    var cycleSelected = 0
     
     let datePicker = UIDatePicker() // 시작 날짜 피커뷰
     let cyclePicker = UIPickerView() // 알림 주기 피커뷰
@@ -52,7 +53,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         self.profileImg.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
         self.name.text = data["name"] as? String
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.dateFormat = "yyyy.MM.dd E"
         self.startDate.text = dateFormatter.string(from: data["startDate"] as? Date ?? Date())
         self.isAlert.isOn = data["isAlert"] as? Bool ?? false
         isAlertColor(self.isAlert)
@@ -66,7 +67,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             self.profileImg.image = UIImage(named: "account.jpg")
             self.name.text = ""
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy.MM.dd"
+            dateFormatter.dateFormat = "yyyy.MM.dd E"
             self.startDate.text = dateFormatter.string(from: Date())
             self.isAlert.isOn = false
             isAlertColor(self.isAlert)
@@ -123,7 +124,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.setValue(profileData, forKey: "profileImg")
         data.setValue(self.name.text, forKey: "name")
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.dateFormat = "yyyy.MM.dd E"
         let startDate = dateFormatter.date(from: self.startDate.text!)!
         data.setValue(startDate, forKey: "startDate")
         data.setValue(self.isAlert.isOn, forKey: "isAlert")
@@ -135,7 +136,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         data.write(toFile: clist, atomically: true)
         
         if self.isAlert.isOn {
-            alert(alertTime)
+            cancelAlert()
+            alert(startDate, alertTime)
         } else {
             cancelAlert()
         }
@@ -237,7 +239,7 @@ extension ProfileVC {
     
     @objc func dateChanged(_ sender: UIDatePicker) {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.dateFormat = "yyyy.MM.dd E"
         startDate.text = dateFormatter.string(from: sender.date)
         view.endEditing(true)
     }
@@ -281,14 +283,39 @@ extension ProfileVC {
         }
     }
     
-    func alert(_ alertTime: Date?){
+    func alert(_ startDate: Date?, _ alertTime: Date?){
         let notificationContent = UNMutableNotificationContent()
         notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
         //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
-        
+
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.hour, .minute], from: alertTime!)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        var components : DateComponents
+        let trigger : UNNotificationTrigger
+        
+        switch self.alertCycle.text! {
+        case "매일":
+            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            print("매일")
+        case "일주일에 한 번":
+            let weekday = calendar.component(.weekday, from: startDate!)
+            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+            components.weekday = weekday
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            print("일주일에 한 번")
+            print(components)
+//        case "한 달에 한 번":
+//            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+//            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+//        case "일 년에 한 번":
+//            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+//            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        default:
+            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+            print("error")
+        }
+
         let request = UNNotificationRequest(identifier: "\(appDelegate.index)",
                                             content: notificationContent,
                                             trigger: trigger)
