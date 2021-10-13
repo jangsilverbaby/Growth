@@ -54,12 +54,14 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd E"
         self.startDate.text = dateFormatter.string(from: data["startDate"] as? Date ?? Date())
+        self.datePicker.date = data["startDate"] as? Date ?? Date()
         self.isAlert.isOn = data["isAlert"] as? Bool ?? false
         isAlertColor(self.isAlert)
         self.alertCycle.text = data["alertCycle"] as? String
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
         self.alertTime.text = timeFormatter.string(from: data["alertTime"] as? Date ?? Date())
+        self.timePicker.date = data["alertTime"] as? Date ?? Date()
         
         // 추가
         if profileSegue == "addProfile" {
@@ -70,7 +72,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             self.startDate.text = dateFormatter.string(from: Date())
             self.isAlert.isOn = false
             isAlertColor(self.isAlert)
-            self.alertCycle.text = "하루"
+            self.alertCycle.text = "매일"
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "hh:mm a"
             self.alertTime.text = timeFormatter.string(from: Date())
@@ -91,6 +93,17 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let path = paths[0] as NSString
+        let clist = path.strings(byAppendingPaths: [customPlist]).first!
+        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
+        
+        self.cyclePicker.selectRow(cycleList.firstIndex(of: data["alertCycle"] as? String ?? "매일")!, inComponent: 0, animated: false)
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
@@ -198,9 +211,6 @@ extension ProfileVC : UIImagePickerControllerDelegate {
     // 이미지를 선택하면 이 메소드가 자동으로 호출된다.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            
-            /* 데이터에 저장하는 부분을 구현할 예정*/
-            
             self.profileImg.image = img
         }
         // 이 구문을 누락하면 이미지 피커 컨트롤러 창은 닫히지 않는다.
@@ -337,6 +347,7 @@ extension ProfileVC {
 extension ProfileVC : UIPickerViewDelegate, UIPickerViewDataSource {
     func alertCycleVDL() {
         cyclePicker.delegate = self
+        cyclePicker.dataSource = self
         self.alertCycle.inputView = cyclePicker
         
         let toolbar = UIToolbar()
@@ -375,8 +386,6 @@ extension ProfileVC : UIPickerViewDelegate, UIPickerViewDataSource {
     // 주기 입력 후에 실행될 코드
     @objc func alertCycleDone(_ sender : Any) {
         self.view.endEditing(true)
-        
-        /* 데이터에 저장하는 부분을 구현할 예정*/
     }
 }
 
