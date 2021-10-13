@@ -26,8 +26,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var profileSegue = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    var cycleList = ["매일", "일주일에 한 번", "한 달에 한 번", "일 년에 한 번"]
-    var cycleSelected = 0
+    var cycleList = ["매일", "일주일에 한 번", "일 년에 한 번"]
     
     let datePicker = UIDatePicker() // 시작 날짜 피커뷰
     let cyclePicker = UIPickerView() // 알림 주기 피커뷰
@@ -296,20 +295,21 @@ extension ProfileVC {
         case "매일":
             components = calendar.dateComponents([.hour, .minute], from: alertTime!)
             trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            print("매일")
+            print(components)
         case "일주일에 한 번":
             let weekday = calendar.component(.weekday, from: startDate!)
             components = calendar.dateComponents([.hour, .minute], from: alertTime!)
             components.weekday = weekday
             trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-            print("일주일에 한 번")
             print(components)
-//        case "한 달에 한 번":
-//            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
-//            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-//        case "일 년에 한 번":
-//            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
-//            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        case "일 년에 한 번":
+            let month = calendar.component(.month, from: startDate!)
+            let day = calendar.component(.day, from: startDate!)
+            components = calendar.dateComponents([.hour, .minute], from: alertTime!)
+            components.month = month
+            components.day = day
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            print(components)
         default:
             components = calendar.dateComponents([.hour, .minute], from: alertTime!)
             trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
