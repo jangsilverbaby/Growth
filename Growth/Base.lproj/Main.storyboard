@@ -364,7 +364,6 @@
                         <outlet property="cycleLabel" destination="ZMF-1A-fPB" id="p1g-6d-41h"/>
                         <outlet property="deleteBtn" destination="yHR-lg-k8b" id="lw6-NN-skV"/>
                         <outlet property="isAlert" destination="2kf-RI-XZX" id="ooE-Qn-v1Y"/>
-                        <outlet property="isAlertLabel" destination="ddJ-eF-ump" id="adO-Jq-Kj5"/>
                         <outlet property="name" destination="wrO-wC-Alw" id="n4Q-Nw-Dyt"/>
                         <outlet property="profileImg" destination="l4f-6g-b62" id="5Iu-qF-kV9"/>
                         <outlet property="profileImgEditBtn" destination="ACK-mr-2lq" id="rjC-3c-sJd"/>

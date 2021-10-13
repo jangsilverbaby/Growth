@@ -14,15 +14,16 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
     @IBOutlet weak var alertTime: UITextField! // 알림 시간
-    @IBOutlet weak var deleteBtn: UIButton!
-    @IBOutlet weak var isAlertLabel: UILabel!
-    @IBOutlet weak var cycleLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var deleteBtn: UIButton! // 삭제 버튼
+    @IBOutlet weak var cycleLabel: UILabel! // 알림 주기 라벨
+    @IBOutlet weak var timeLabel: UILabel! // 알림 시간 라벨
     
     // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
     var defaultPList : NSDictionary!
+    
     // 프로필 리스트
     var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
+    
     var profileSegue = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -49,6 +50,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let clist = path.strings(byAppendingPaths: [customPlist]).first!
         let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
         print("custom plist=\(clist)")
+        
+        // 프로필 수정 화면
         self.profileImg.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
         self.name.text = data["name"] as? String
         let dateFormatter = DateFormatter()
@@ -63,7 +66,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         self.alertTime.text = timeFormatter.string(from: data["alertTime"] as? Date ?? Date())
         self.timePicker.date = data["alertTime"] as? Date ?? Date()
         
-        // 추가
+        // 프로필 추가 화면
         if profileSegue == "addProfile" {
             self.profileImg.image = UIImage(named: "account.jpg")
             self.name.text = ""
@@ -103,6 +106,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let clist = path.strings(byAppendingPaths: [customPlist]).first!
         let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
         
+        // 선택된 row 보이기
         self.cyclePicker.selectRow(cycleList.firstIndex(of: data["alertCycle"] as? String ?? "매일")!, inComponent: 0, animated: false)
     }
     
@@ -110,6 +114,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         view.endEditing(true)
     }
     
+    // 완료 버튼
     @IBAction func done(_ sender: Any) {
         let last = frontlist.count-1
         var i = 0
@@ -157,6 +162,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         self.navigationController?.popViewController(animated: true)
     }
     
+    // 삭제 버튼
     @IBAction func deleteBtnPressed(_ sender: Any) {
         let alert = UIAlertController(title: "프로필을 삭제하시겠습니까?", message: "OK 버튼을 누르면 프로필이 완전히 삭제됩니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
