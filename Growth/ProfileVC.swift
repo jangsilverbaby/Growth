@@ -22,6 +22,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     var record = NSManagedObject()
     var profileSegue = ""
     let imageManager = ImageManager()
+    var frontlist = [NSManagedObject()]
     
     var cycleList = ["매일", "일주일에 한 번", "일 년에 한 번"]
     
@@ -37,6 +38,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         if profileSegue == "editProfile" {
             // 프로필 수정 화면
             // 이미지 불러오기
+            self.profileImg.image = imageManager.getSavedImage(named: record.value(forKey: "profileImg") as! String)
             self.name.text = record.value(forKey: "name") as? String
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd E"
@@ -96,10 +98,27 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         // 관리 객체 컨텍스트 참조
         let context = appDelegate.persistentContainer.viewContext
         
-        let image = self.profileImg.image
-        // 이미지 저장
-        record.setValue(profileData, forKey: "profileImg")
-        record.setValue(self.name.text, forKey: "name")
+        var namelist: [String] = []
+        for i in frontlist {
+            if i == record {
+                continue
+            }
+            namelist.append(i.value(forKey: "name") as! String)
+        }
+        
+        name.text = name.text!.trimmingCharacters(in: .whitespaces)
+        
+        if self.name.text == "" {
+            nameAlert("이름을 빈칸으로 둘 수 없습니다.\n이름을 입력해주세요")
+        } else if namelist.contains(self.name.text!) {
+            nameAlert("중복된 이름은 사용할 수 없습니다.\n다른 이름을 입력해 주세요")
+        } else {
+            let image = self.profileImg.image
+            let profileImg = imageManager.saveImage(name: self.name.text!, image: image!)!
+            record.setValue(profileImg, forKey: "profileImg")
+            record.setValue(self.name.text, forKey: "name")
+        }
+    
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd E"
         let startDate = dateFormatter.date(from: self.startDate.text!)!
@@ -203,19 +222,23 @@ extension ProfileVC : UIImagePickerControllerDelegate {
 extension ProfileVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 1 { // 두 번째 셀이 클릭되었을 때에만
-            let alert = UIAlertController(title: nil, message: "이름을 입력하세요", preferredStyle: .alert)
-            // 입력 필드 추가
-            alert.addTextField() {
-                $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
-            }
-            // 버튼 및 액션 추가
-            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-                let value = alert.textFields?[0].text
-                self.name.text = value
-            })
-            // 알림창 띄움
-            self.present(alert, animated: false, completion: nil)
+            nameAlert("이름을 입력해주세요")
         }
+    }
+    
+    func nameAlert(_ alertMessage: String) {
+        let alert = UIAlertController(title: nil, message: alertMessage, preferredStyle: .alert)
+        // 입력 필드 추가
+        alert.addTextField() {
+            $0.text = self.name.text // name 레이블의 텍스트를 입력폼에 기본값으로 넣어준다.
+        }
+        // 버튼 및 액션 추가
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+            let value = alert.textFields?[0].text
+            self.name.text = value
+        })
+        // 알림창 띄움
+        self.present(alert, animated: false, completion: nil)
     }
 }
 
@@ -308,7 +331,7 @@ extension ProfileVC {
             print("error")
         }
         
-        let request = UNNotificationRequest(identifier: "\(String(describing: record.value(forKey: "profileId")))",
+        let request = UNNotificationRequest(identifier: "\(String(describing: record.value(forKey: "\(String(describing: self.name.text))")))",
                                             content: notificationContent,
                                             trigger: trigger)
         
@@ -320,8 +343,8 @@ extension ProfileVC {
     }
     
     func cancelAlert() {
-        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(String(describing: record.value(forKey: "profileId")))"])
-        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(String(describing: record.value(forKey: "profileId")))"])
+        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(String(describing: self.name.text))"])
+        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(String(describing: self.name.text))"])
     }
 }
 

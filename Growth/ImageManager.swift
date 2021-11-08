@@ -9,7 +9,7 @@ import UIKit
 class ImageManager {
     static let shared = ImageManager()
 
-    func saveImage(name: Int16, image: UIImage) -> String? {
+    func saveImage(name: String, image: UIImage) -> String? {
         guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else {
             return nil
         }
@@ -17,8 +17,8 @@ class ImageManager {
             return nil
         }
         do {
-            try data.write(to: directory.appendingPathComponent("\(profileId).png")!)
-            return "\(profileId).png"
+            try data.write(to: directory.appendingPathComponent("\(name).png")!)
+            return "\(name).png"
         } catch {
             print(error.localizedDescription)
             return nil

@@ -10,7 +10,7 @@
         <attribute name="alertTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isAlert" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="profileImg" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="profileImg" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>

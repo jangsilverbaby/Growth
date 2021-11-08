@@ -70,6 +70,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
         pvc.record = object
         pvc.profileSegue = addProfile
+        pvc.frontlist = frontlist
         
         self.show(pvc, sender: self)
     }
@@ -104,6 +105,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
         pvc.record = object
         pvc.profileSegue = editProfile
+        pvc.frontlist = frontlist
         
         self.show(pvc, sender: self)
     }
