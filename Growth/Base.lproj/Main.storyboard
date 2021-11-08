@@ -58,7 +58,6 @@
                                                     </state>
                                                     <connections>
                                                         <action selector="editBtnPressed:" destination="1OQ-Ta-Ubm" eventType="touchUpInside" id="3a7-cy-0h8"/>
-                                                        <segue destination="Ukz-lz-nAV" kind="show" identifier="editProfile" id="xBy-pn-65E"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p3W-ex-N5C">
@@ -114,7 +113,7 @@
                     <navigationItem key="navigationItem" id="iFC-Tu-yT5">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="UcU-AJ-DCY">
                             <connections>
-                                <segue destination="Ukz-lz-nAV" kind="show" identifier="addProfile" id="9EV-ic-5h1"/>
+                                <action selector="addBtn:" destination="BYZ-38-t0r" id="ftP-7e-Lfx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -230,7 +229,7 @@
         <!--ProfileVC-->
         <scene sceneID="xgn-ib-KvQ">
             <objects>
-                <tableViewController id="Ukz-lz-nAV" customClass="ProfileVC" customModule="Growth" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ProfileVC" id="Ukz-lz-nAV" customClass="ProfileVC" customModule="Growth" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="R6c-zr-PLJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -508,9 +507,6 @@
             <point key="canvasLocation" x="-17.39130434782609" y="71.651785714285708"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="9EV-ic-5h1"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="camera.circle" catalog="system" width="128" height="121"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>

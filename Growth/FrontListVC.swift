@@ -6,39 +6,43 @@
 //
 
 import UIKit
+import CoreData
 
 // UICollectionViewDataSource : 컬렉션 뷰의 셀은 총 몇 개?
 // UICollectionViewDelegate : 컬렉션 뷰를 어떻게 보여줄 것인가?
 class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    var defaultPList : NSDictionary!
-    var frontlist = [Int]()
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    lazy var frontlist: [NSManagedObject] = {
+        return self.fetch()
+    }()
+    
+    let imageManager = ImageManager()
     
     let addProfile = "addProfile"
     let editProfile = "editProfile"
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     let userNotificationCenter = UNUserNotificationCenter.current()
-
+    
+    func fetch() -> [NSManagedObject] {
+        // 앱 델리게이트 객체 참조
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        // 관리 객체 컨텍스트 참조
+        let context = appDelegate.persistentContainer.viewContext
+        // 요청 객체 생성
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Profile")
+        // 데이터 가져오기
+        let result = try! context.fetch(fetchRequest)
+        return result
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        let plist = UserDefaults.standard
-        if let list = plist.array(forKey: "frontlist") as? [Int]{
-            self.frontlist = list
-        } else {
-            plist.setValue(self.frontlist, forKey: "frontlist")
-        }
-        
-        
-        if let defaultPListPath = Bundle.main.path(forResource: "ProfileInfo", ofType: "plist") {
-            self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
-        }
         
         // 사용자에게 알림 권한 요청
         let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .badge, .sound)
@@ -50,34 +54,27 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let plist = UserDefaults.standard
-        if let list = plist.array(forKey: "frontlist") as? [Int]{
-            self.frontlist = list
-        } else {
-            plist.setValue(self.frontlist, forKey: "frontlist")
-        }
+        frontlist = {
+            return self.fetch()
+        }()
         collectionView.reloadData()
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == addProfile {
-            let vc = segue.destination as! ProfileVC
-            vc.profileSegue = addProfile
-            let last = frontlist.count-1
-            if last < 0 {
-                self.appDelegate.index = 0
-            } else {
-                self.appDelegate.index = frontlist[last] + 1
-            }
-        }
+    
+    @IBAction func addBtn(_ sender: Any) {
+        // 앱 델리게이트 객체 참조
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        // 관리 객체 컨텍스트 참조
+        let context = appDelegate.persistentContainer.viewContext
+        // 관리 객체 생성 & 값을 설정
+        let object = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
+        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
+        pvc.record = object
+        pvc.profileSegue = addProfile
         
-        if segue.identifier == editProfile {
-            let vc = segue.destination as! ProfileVC
-            vc.profileSegue = editProfile
-        }
+        self.show(pvc, sender: self)
     }
     
-    // 컬렉션 뷰에 총 몇개의 벳울 표시할 것인가
+    // 컬렉션 뷰에 총 몇개의 셀을 표시할 것인가
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.frontlist.count
     }
@@ -86,49 +83,54 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "frontCell", for: indexPath) as! FrontCell
         
-        let customPlist = "\(frontlist[indexPath.item]).plist" // 읽어올 파일명
+        // 해당하는 데이터 가져오기
+        let record = self.frontlist[indexPath.item]
+        let name = record.value(forKey: "name") as? String
+        if let profileImg = record.value(forKey: "profileImg") as? String {
+            cell.frontImgView.image = imageManager.getSavedImage(named: profileImg)
+        }
         
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] as NSString
-        let plist = path.strings(byAppendingPaths: [customPlist]).first!
-        let data = NSMutableDictionary(contentsOfFile: plist) ?? NSMutableDictionary(dictionary: self.defaultPList)
-        
-        cell.frontImgView.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
         cell.frontImgView.contentMode = .scaleAspectFill
         cell.frontImgView.layer.cornerRadius = 5.0
-        cell.nameLabel.text = data["name"] as? String
-        cell.editBtn.tag = frontlist[indexPath.item]
+        cell.nameLabel.text = name
+        cell.editBtn.addTarget(self, action: #selector(editBtn), for: .touchUpInside)
+        cell.editBtn.tag = indexPath.item
         
         return cell
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let width = collectionView.frame.width
-            //let height = collectionView.frame.height
-            
-            let itemsPerRow: CGFloat = 2
-            let widthPadding = sectionInsets.left * (itemsPerRow + 1)
-            //let itemsPerColumn: CGFloat = 3
-           // let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
-            
-            let cellWidth = (width - widthPadding) / itemsPerRow
-            //let cellHeight = (height - heightPadding) / itemsPerColumn
+    
+    @objc func editBtn(sender: UIButton) {
+        let object = self.frontlist[sender.tag]
+        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
+        pvc.record = object
+        pvc.profileSegue = editProfile
         
-            return CGSize(width: cellWidth, height: cellWidth)
-        }
+        self.show(pvc, sender: self)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width
+        
+        let itemsPerRow: CGFloat = 2
+        let widthPadding = sectionInsets.left * (itemsPerRow + 1)
+        
+        let cellWidth = (width - widthPadding) / itemsPerRow
+        
+        return CGSize(width: cellWidth, height: cellWidth)
+    }
     
     func collectionView(_ collectionView: UICollectionView,
-                            layout collectionViewLayout: UICollectionViewLayout,
-                            insetForSectionAt section: Int) -> UIEdgeInsets {
-          return sectionInsets
-        }
-        
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
-                            layout collectionViewLayout: UICollectionViewLayout,
-                            minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
     }
-        
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(frontlist[indexPath.item])

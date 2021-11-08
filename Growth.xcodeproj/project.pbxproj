@@ -30,6 +30,7 @@
 		F2BBA46126E63CB5002AD282 /* GrowthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46026E63CB5002AD282 /* GrowthTests.swift */; };
 		F2BBA46C26E63CB5002AD282 /* GrowthUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */; };
 		F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DD91982706C32600015F2C /* ProfileInfo.plist */; };
+		F2FD3A3D27351727000E4431 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FD3A3C27351727000E4431 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthUITests.swift; sourceTree = "<group>"; };
 		F2BBA46D26E63CB5002AD282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2DD91982706C32600015F2C /* ProfileInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProfileInfo.plist; sourceTree = "<group>"; };
+		F2FD3A3C27351727000E4431 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +161,7 @@
 				F200FA7626EA4492004D59EE /* FrontListVC.swift */,
 				F27C7C5826FEEF5D00543546 /* ProfileVC.swift */,
 				F2DD91982706C32600015F2C /* ProfileInfo.plist */,
+				F2FD3A3C27351727000E4431 /* ImageManager.swift */,
 			);
 			path = Growth;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				F2BBA44726E63CB0002AD282 /* AppDelegate.swift in Sources */,
 				F200FA7126EA3F86004D59EE /* FrontCell.swift in Sources */,
 				F27C7C5926FEEF5D00543546 /* ProfileVC.swift in Sources */,
+				F2FD3A3D27351727000E4431 /* ImageManager.swift in Sources */,
 				F200FA7726EA4492004D59EE /* FrontListVC.swift in Sources */,
 				F200FA7526EA4406004D59EE /* FrontData.swift in Sources */,
 				F2BBA45126E63CB0002AD282 /* Growth.xcdatamodeld in Sources */,

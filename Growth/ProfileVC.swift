@@ -5,6 +5,7 @@
 //  Created by eunae on 2021/09/25.
 //
 import UIKit
+import CoreData
 
 class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
@@ -18,14 +19,9 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var cycleLabel: UILabel! // 알림 주기 라벨
     @IBOutlet weak var timeLabel: UILabel! // 알림 시간 라벨
     
-    // 메인 번들에 정의된 PList 내용을 정리할 딕셔너리
-    var defaultPList : NSDictionary!
-    
-    // 프로필 리스트
-    var frontlist = UserDefaults.standard.array(forKey: "frontlist") as? [Int] ?? [Int]()
-    
+    var record = NSManagedObject()
     var profileSegue = ""
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let imageManager = ImageManager()
     
     var cycleList = ["매일", "일주일에 한 번", "일 년에 한 번"]
     
@@ -38,36 +34,22 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 메인 번들 ProfileInfo.plist가 포함되어 있으면 이를 읽어와 딕셔너리에 담는다.
-        if let defaultPListPath = Bundle.main.path(forResource: "ProfileInfo", ofType: "plist") {
-            self.defaultPList = NSDictionary(contentsOfFile: defaultPListPath)
-        }
-        
-        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
-        
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] as NSString
-        let clist = path.strings(byAppendingPaths: [customPlist]).first!
-        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
-        print("custom plist=\(clist)")
-        
-        // 프로필 수정 화면
-        self.profileImg.image = UIImage(data: (data["profileImg"] as? Data ?? UIImage(named: "account.jpg")?.pngData())!)
-        self.name.text = data["name"] as? String
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd E"
-        self.startDate.text = dateFormatter.string(from: data["startDate"] as? Date ?? Date())
-        self.datePicker.date = data["startDate"] as? Date ?? Date()
-        self.isAlert.isOn = data["isAlert"] as? Bool ?? false
-        isAlertColor(self.isAlert)
-        self.alertCycle.text = data["alertCycle"] as? String
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        self.alertTime.text = timeFormatter.string(from: data["alertTime"] as? Date ?? Date())
-        self.timePicker.date = data["alertTime"] as? Date ?? Date()
-        
-        // 프로필 추가 화면
-        if profileSegue == "addProfile" {
+        if profileSegue == "editProfile" {
+            // 프로필 수정 화면
+            // 이미지 불러오기
+            self.name.text = record.value(forKey: "name") as? String
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd E"
+            self.startDate.text = dateFormatter.string(from: record.value(forKey: "startDate") as? Date ?? Date())
+            self.datePicker.date = record.value(forKey: "startDate") as? Date ?? Date()
+            self.isAlert.isOn = record.value(forKey: "isAlert") as? Bool ?? false
+            isAlertColor(self.isAlert)
+            self.alertCycle.text = record.value(forKey: "alertCycle") as? String
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "hh:mm a"
+            self.alertTime.text = timeFormatter.string(from: record.value(forKey: "alertTime") as? Date ?? Date())
+            self.timePicker.date = record.value(forKey: "alertTime") as? Date ?? Date()
+        } else { // 프로필 추가 화면
             self.profileImg.image = UIImage(named: "account.jpg")
             self.name.text = ""
             let dateFormatter = DateFormatter()
@@ -88,7 +70,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         
         // 알림 주기
         alertCycleVDL()
-
+        
         // 알림 시간
         alertTimeVDL()
         
@@ -99,15 +81,8 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
-        
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] as NSString
-        let clist = path.strings(byAppendingPaths: [customPlist]).first!
-        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
-        
         // 선택된 row 보이기
-        self.cyclePicker.selectRow(cycleList.firstIndex(of: data["alertCycle"] as? String ?? "매일")!, inComponent: 0, animated: false)
+        self.cyclePicker.selectRow(cycleList.firstIndex(of: record.value(forKey: "alertCycle") as? String ?? "매일")!, inComponent: 0, animated: false)
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
@@ -116,41 +91,32 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     // 완료 버튼
     @IBAction func done(_ sender: Any) {
-        let last = frontlist.count-1
-        var i = 0
-        if last >= 0 {
-            i = frontlist[last] + 1
-        }
-        if appDelegate.index == i {
-            self.frontlist.append(i)
-        }
-        
-        let plist = UserDefaults.standard
-        plist.set(self.frontlist, forKey: "frontlist")
-        plist.synchronize()
-        
-        let customPlist = "\(appDelegate.index).plist" // 읽어올 파일명
-        
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let path = paths[0] as NSString
-        let clist = path.strings(byAppendingPaths: [customPlist]).first!
-        let data = NSMutableDictionary(contentsOfFile: clist) ?? NSMutableDictionary(dictionary: self.defaultPList)
+        // 앱 델리게이트 객체 참조
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        // 관리 객체 컨텍스트 참조
+        let context = appDelegate.persistentContainer.viewContext
         
         let image = self.profileImg.image
-        let profileData = image?.pngData()
-        data.setValue(profileData, forKey: "profileImg")
-        data.setValue(self.name.text, forKey: "name")
+        // 이미지 저장
+        record.setValue(profileData, forKey: "profileImg")
+        record.setValue(self.name.text, forKey: "name")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd E"
         let startDate = dateFormatter.date(from: self.startDate.text!)!
-        data.setValue(startDate, forKey: "startDate")
-        data.setValue(self.isAlert.isOn, forKey: "isAlert")
-        data.setValue(self.alertCycle.text, forKey: "alertCycle")
+        record.setValue(startDate, forKey: "startDate")
+        record.setValue(self.isAlert.isOn, forKey: "isAlert")
+        record.setValue(self.alertCycle.text, forKey: "alertCycle")
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "hh:mm a"
         let alertTime = timeFormatter.date(from: self.alertTime.text!)
-        data.setValue(alertTime, forKey: "alertTime")
-        data.write(toFile: clist, atomically: true)
+        record.setValue(alertTime, forKey: "alertTime")
+        
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            print("save fail")
+        }
         
         if self.isAlert.isOn {
             cancelAlert()
@@ -166,10 +132,20 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBAction func deleteBtnPressed(_ sender: Any) {
         let alert = UIAlertController(title: "프로필을 삭제하시겠습니까?", message: "OK 버튼을 누르면 프로필이 완전히 삭제됩니다.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
-            self.frontlist.remove(at: self.frontlist.firstIndex(of: self.appDelegate.index)!)
-            let plist = UserDefaults.standard
-            plist.set(self.frontlist, forKey: "frontlist")
-            plist.synchronize()
+            // 앱 델리게이트 객체 참조
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            // 관리 객체 컨텍스트 참조
+            let context = appDelegate.persistentContainer.viewContext
+            // 컨텍스트로부터 해당 객체 삭제
+            context.delete(self.record)
+            // 영구 저장소에 커밋한다
+            do {
+                try context.save()
+            } catch {
+                context.rollback()
+                print("delete fail")
+            }
+            
             self.navigationController?.popViewController(animated: true)
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -302,7 +278,7 @@ extension ProfileVC {
         let notificationContent = UNMutableNotificationContent()
         notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
         //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
-
+        
         let calendar = Calendar.current
         var components : DateComponents
         let trigger : UNNotificationTrigger
@@ -331,8 +307,8 @@ extension ProfileVC {
             trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
             print("error")
         }
-
-        let request = UNNotificationRequest(identifier: "\(appDelegate.index)",
+        
+        let request = UNNotificationRequest(identifier: "\(String(describing: record.value(forKey: "profileId")))",
                                             content: notificationContent,
                                             trigger: trigger)
         
@@ -344,8 +320,8 @@ extension ProfileVC {
     }
     
     func cancelAlert() {
-        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(appDelegate.index)"])
-        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(appDelegate.index)"])
+        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(String(describing: record.value(forKey: "profileId")))"])
+        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(String(describing: record.value(forKey: "profileId")))"])
     }
 }
 
