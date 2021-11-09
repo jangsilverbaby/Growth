@@ -117,34 +117,33 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             let profileImg = imageManager.saveImage(name: self.name.text!, image: image!)!
             record.setValue(profileImg, forKey: "profileImg")
             record.setValue(self.name.text, forKey: "name")
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd E"
+            let startDate = dateFormatter.date(from: self.startDate.text!)!
+            record.setValue(startDate, forKey: "startDate")
+            record.setValue(self.isAlert.isOn, forKey: "isAlert")
+            record.setValue(self.alertCycle.text, forKey: "alertCycle")
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "hh:mm a"
+            let alertTime = timeFormatter.date(from: self.alertTime.text!)
+            record.setValue(alertTime, forKey: "alertTime")
+            
+            do {
+                try context.save()
+            } catch {
+                context.rollback()
+                print("save fail")
+            }
+            
+            if self.isAlert.isOn {
+                cancelAlert(self.name.text!)
+                alert(startDate, alertTime, self.name.text!)
+            } else {
+                cancelAlert(self.name.text!)
+            }
+            
+            self.navigationController?.popViewController(animated: true)
         }
-    
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd E"
-        let startDate = dateFormatter.date(from: self.startDate.text!)!
-        record.setValue(startDate, forKey: "startDate")
-        record.setValue(self.isAlert.isOn, forKey: "isAlert")
-        record.setValue(self.alertCycle.text, forKey: "alertCycle")
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "hh:mm a"
-        let alertTime = timeFormatter.date(from: self.alertTime.text!)
-        record.setValue(alertTime, forKey: "alertTime")
-        
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            print("save fail")
-        }
-        
-        if self.isAlert.isOn {
-            cancelAlert()
-            alert(startDate, alertTime)
-        } else {
-            cancelAlert()
-        }
-        
-        self.navigationController?.popViewController(animated: true)
     }
     
     // 삭제 버튼
@@ -297,7 +296,7 @@ extension ProfileVC {
         }
     }
     
-    func alert(_ startDate: Date?, _ alertTime: Date?){
+    func alert(_ startDate: Date?, _ alertTime: Date?, _ identifier: String){
         let notificationContent = UNMutableNotificationContent()
         notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
         //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
@@ -331,7 +330,7 @@ extension ProfileVC {
             print("error")
         }
         
-        let request = UNNotificationRequest(identifier: "\(String(describing: record.value(forKey: "\(String(describing: self.name.text))")))",
+        let request = UNNotificationRequest(identifier: identifier,
                                             content: notificationContent,
                                             trigger: trigger)
         
@@ -342,9 +341,9 @@ extension ProfileVC {
         }
     }
     
-    func cancelAlert() {
-        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(String(describing: self.name.text))"])
-        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: ["\(String(describing: self.name.text))"])
+    func cancelAlert(_ identifier: String) {
+        userNotificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+        userNotificationCenter.removeDeliveredNotifications(withIdentifiers: [identifier])
     }
 }
 
