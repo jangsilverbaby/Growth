@@ -11,6 +11,7 @@ class FrontCell: UICollectionViewCell {
     @IBOutlet weak var frontImgView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var contentAddBtn: UIButton!
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var cornerRadius: CGFloat = 5.0

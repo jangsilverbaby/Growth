@@ -96,6 +96,8 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         cell.nameLabel.text = name
         cell.editBtn.addTarget(self, action: #selector(editBtn), for: .touchUpInside)
         cell.editBtn.tag = indexPath.item
+        cell.contentAddBtn.addTarget(self, action: #selector(contentAddBtn), for: .touchUpInside)
+        cell.contentAddBtn.tag = indexPath.item
         
         return cell
     }
@@ -108,6 +110,12 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         pvc.frontlist = frontlist
         
         self.show(pvc, sender: self)
+    }
+    
+    @objc func contentAddBtn(sender: UIButton) {
+        let object = self.frontlist[sender.tag]
+        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "CotentFormVC") as! ContentFormVC
+        pvc.record = object
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

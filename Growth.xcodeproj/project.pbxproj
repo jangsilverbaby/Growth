@@ -29,6 +29,9 @@
 		F2BBA45626E63CB4002AD282 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2BBA45426E63CB4002AD282 /* LaunchScreen.storyboard */; };
 		F2BBA46126E63CB5002AD282 /* GrowthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46026E63CB5002AD282 /* GrowthTests.swift */; };
 		F2BBA46C26E63CB5002AD282 /* GrowthUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */; };
+		F2BED600273A9E4100C8DE45 /* ContentListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */; };
+		F2BED606273AA2F200C8DE45 /* ContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED605273AA2F200C8DE45 /* ContentCell.swift */; };
+		F2BED608273AA39E00C8DE45 /* ContentFormVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED607273AA39E00C8DE45 /* ContentFormVC.swift */; };
 		F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DD91982706C32600015F2C /* ProfileInfo.plist */; };
 		F2FD3A3D27351727000E4431 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FD3A3C27351727000E4431 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +82,9 @@
 		F2BBA46726E63CB5002AD282 /* GrowthUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GrowthUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2BBA46B26E63CB5002AD282 /* GrowthUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthUITests.swift; sourceTree = "<group>"; };
 		F2BBA46D26E63CB5002AD282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentListVC.swift; sourceTree = "<group>"; };
+		F2BED605273AA2F200C8DE45 /* ContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCell.swift; sourceTree = "<group>"; };
+		F2BED607273AA39E00C8DE45 /* ContentFormVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentFormVC.swift; sourceTree = "<group>"; };
 		F2DD91982706C32600015F2C /* ProfileInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProfileInfo.plist; sourceTree = "<group>"; };
 		F2FD3A3C27351727000E4431 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -162,6 +168,9 @@
 				F27C7C5826FEEF5D00543546 /* ProfileVC.swift */,
 				F2DD91982706C32600015F2C /* ProfileInfo.plist */,
 				F2FD3A3C27351727000E4431 /* ImageManager.swift */,
+				F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */,
+				F2BED605273AA2F200C8DE45 /* ContentCell.swift */,
+				F2BED607273AA39E00C8DE45 /* ContentFormVC.swift */,
 			);
 			path = Growth;
 			sourceTree = "<group>";
@@ -326,10 +335,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2BBA44726E63CB0002AD282 /* AppDelegate.swift in Sources */,
+				F2BED606273AA2F200C8DE45 /* ContentCell.swift in Sources */,
 				F200FA7126EA3F86004D59EE /* FrontCell.swift in Sources */,
 				F27C7C5926FEEF5D00543546 /* ProfileVC.swift in Sources */,
+				F2BED600273A9E4100C8DE45 /* ContentListVC.swift in Sources */,
 				F2FD3A3D27351727000E4431 /* ImageManager.swift in Sources */,
 				F200FA7726EA4492004D59EE /* FrontListVC.swift in Sources */,
+				F2BED608273AA39E00C8DE45 /* ContentFormVC.swift in Sources */,
 				F200FA7526EA4406004D59EE /* FrontData.swift in Sources */,
 				F2BBA45126E63CB0002AD282 /* Growth.xcdatamodeld in Sources */,
 				F2BBA44926E63CB0002AD282 /* SceneDelegate.swift in Sources */,
