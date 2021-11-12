@@ -106,10 +106,9 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     @objc func contentAddBtn(sender: UIButton) {
-        let object = self.frontlist[sender.tag]
+        let object = self.frontlist[sender.tag] as? ProfileMO
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
-        pvc.record = object as? ProfileMO
-        
+        pvc.record = object
         self.show(pvc, sender: self)
     }
     
@@ -138,7 +137,11 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(frontlist[indexPath.item])
+        let object = self.frontlist[indexPath.item] as! ProfileMO
+        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentListVC") as! ContentListVC
+        pvc.record = object
+        
+        self.show(pvc, sender: self)
     }
 }
 

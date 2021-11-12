@@ -8,7 +8,9 @@
 import UIKit
 
 class ContentCell: UITableViewCell {
-
+    @IBOutlet weak var regdate: UILabel!
+    @IBOutlet weak var contents: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

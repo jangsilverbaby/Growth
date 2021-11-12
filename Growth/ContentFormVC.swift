@@ -15,9 +15,7 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     var record: ProfileMO!
     let imageManeger = ImageManager()
     
-    lazy var contentlist: [ContentMO]! = {
-        return self.record.content?.array as! [ContentMO]
-    }()
+    var contentlist: [ContentMO]!
     
     override func viewDidLoad() {
         let dateFormatter = DateFormatter()
@@ -54,10 +52,12 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         
         do {
             try context.save()
-            self.contentlist.insert(object, at:0)
         } catch {
             context.rollback()
+            print("save fail")
         }
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     // 카메라 버튼을 클릭했을 때 호출되는 메소드
@@ -79,14 +79,4 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         // 이미지 피커 컨트롤러를 닫는다.
         picker.dismiss(animated: false)
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
