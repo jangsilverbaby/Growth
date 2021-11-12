@@ -61,14 +61,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     @IBAction func addBtn(_ sender: Any) {
-        // 앱 델리게이트 객체 참조
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        // 관리 객체 컨텍스트 참조
-        let context = appDelegate.persistentContainer.viewContext
-        // 관리 객체 생성 & 값을 설정
-        let object = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
-        pvc.record = object
         pvc.profileSegue = addProfile
         pvc.frontlist = frontlist
         
@@ -114,8 +107,10 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     @objc func contentAddBtn(sender: UIButton) {
         let object = self.frontlist[sender.tag]
-        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "CotentFormVC") as! ContentFormVC
+        let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
         pvc.record = object
+        
+        self.show(pvc, sender: self)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

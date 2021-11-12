@@ -84,7 +84,9 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     override func viewDidAppear(_ animated: Bool) {
         // 선택된 row 보이기
-        self.cyclePicker.selectRow(cycleList.firstIndex(of: record.value(forKey: "alertCycle") as? String ?? "매일")!, inComponent: 0, animated: false)
+        if profileSegue == "editProfile" {
+            self.cyclePicker.selectRow(cycleList.firstIndex(of: record.value(forKey: "alertCycle") as? String ?? "매일")!, inComponent: 0, animated: false)
+        }
     }
     
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
@@ -97,6 +99,9 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         // 관리 객체 컨텍스트 참조
         let context = appDelegate.persistentContainer.viewContext
+
+        // 관리 객체 생성 & 값을 설정
+        record = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
         
         var namelist: [String] = []
         for i in frontlist {
