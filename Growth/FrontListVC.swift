@@ -108,7 +108,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     @objc func contentAddBtn(sender: UIButton) {
         let object = self.frontlist[sender.tag]
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
-        pvc.record = object
+        pvc.record = object as? ProfileMO
         
         self.show(pvc, sender: self)
     }

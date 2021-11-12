@@ -12,8 +12,12 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     
     @IBOutlet weak var preview: UIImageView!
     @IBOutlet weak var contents: UITextView!
-    var record = NSManagedObject()
+    var record: ProfileMO!
     let imageManeger = ImageManager()
+    
+    lazy var contentlist: [ContentMO]! = {
+        return self.record.content?.array as! [ContentMO]
+    }()
     
     override func viewDidLoad() {
         let dateFormatter = DateFormatter()
@@ -36,11 +40,24 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         // 관리 객체 컨텍스트 참조
         let context = appDelegate.persistentContainer.viewContext
         // 관리 객체 생성 & 값을 설정
-        let object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context)
+        let object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context) as! ContentMO
+        object.contents = self.contents.text
+        object.regdate = Date()
+        if let preview = self.preview.image {
+            do {
+                object.image = imageManeger.saveImage(name: try String(contentsOf: object.objectID.uriRepresentation()), image: preview)
+            } catch {
+                print("objectID가 존재하지 않습니다.")
+            }
+        }
+        record.addToContent(object)
         
-        object.setValue(contents.text, forKey: "contents")
-        object.setValue(Date(), forKey: "regdate")
-        //object.setValue(imageManeger.saveImage(name: <#T##String#>, image: self.preview.image), forKey: "image")
+        do {
+            try context.save()
+            self.contentlist.insert(object, at:0)
+        } catch {
+            context.rollback()
+        }
     }
     
     // 카메라 버튼을 클릭했을 때 호출되는 메소드
@@ -63,13 +80,13 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         picker.dismiss(animated: false)
     }
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
