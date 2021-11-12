@@ -95,14 +95,6 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     
     // 완료 버튼
     @IBAction func done(_ sender: Any) {
-        // 앱 델리게이트 객체 참조
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        // 관리 객체 컨텍스트 참조
-        let context = appDelegate.persistentContainer.viewContext
-
-        // 관리 객체 생성 & 값을 설정
-        record = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
-        
         var namelist: [String] = []
         for i in frontlist {
             if i == record {
@@ -118,6 +110,14 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
         } else if namelist.contains(self.name.text!) {
             nameAlert("중복된 이름은 사용할 수 없습니다.\n다른 이름을 입력해 주세요")
         } else {
+            // 앱 델리게이트 객체 참조
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            // 관리 객체 컨텍스트 참조
+            let context = appDelegate.persistentContainer.viewContext
+            if profileSegue == "addProfile" {
+                // 관리 객체 생성 & 값을 설정
+                record = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
+            }
             let image = self.profileImg.image
             let profileImg = imageManager.saveImage(name: self.name.text!, image: image!)!
             record.setValue(profileImg, forKey: "profileImg")
