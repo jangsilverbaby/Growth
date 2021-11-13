@@ -32,6 +32,7 @@ class ContentListVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         contentlist = self.record.content?.array as? [ContentMO]
+        contentlist.sort(by: {$0.regdate! > $1.regdate!})
         self.tableView.reloadData()
     }
     
