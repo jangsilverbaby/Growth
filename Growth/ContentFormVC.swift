@@ -41,12 +41,11 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         let object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context) as! ContentMO
         object.contents = self.contents.text
         object.regdate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddHHmmssE"
+        let dateString = dateFormatter.string(from: object.regdate!)
         if let preview = self.preview.image {
-            do {
-                object.image = imageManeger.saveImage(name: try String(contentsOf: object.objectID.uriRepresentation()), image: preview)
-            } catch {
-                print("objectID가 존재하지 않습니다.")
-            }
+            object.image = imageManeger.saveImage(name: dateString, image: preview)
         }
         record.addToContent(object)
         

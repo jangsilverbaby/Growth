@@ -165,11 +165,11 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="contents" destination="6oB-6S-JP1" id="1TN-H8-cwZ"/>
-                                    <outlet property="regdate" destination="jJZ-cs-UPt" id="I2v-R2-gUI"/>
+                                    <outlet property="contents" destination="6oB-6S-JP1" id="fqx-iM-r0z"/>
+                                    <outlet property="regdate" destination="jJZ-cs-UPt" id="RV9-88-JGy"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="contentCellwithImage" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="imageCell" rowHeight="532" id="Imi-Rf-9GB" customClass="ContentCell" customModule="Growth" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="contentCellwithImage" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contentwithImageCell" rowHeight="532" id="Imi-Rf-9GB" customClass="ContentCell" customModule="Growth" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="154.5" width="414" height="532"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Imi-Rf-9GB" id="3fJ-vL-r84">
@@ -196,6 +196,11 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="contentImage" destination="isi-Bq-day" id="IFv-HT-9qz"/>
+                                    <outlet property="contents" destination="Ska-gA-B8z" id="q4z-Yg-37w"/>
+                                    <outlet property="regdate" destination="VnD-xh-dlP" id="pcG-8v-NZD"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

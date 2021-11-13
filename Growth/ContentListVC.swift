@@ -12,6 +12,8 @@ class ContentListVC: UITableViewController {
     
     var record: ProfileMO!
     
+    let imageManager = ImageManager()
+    
     lazy var contentlist: [ContentMO]! = {
         return self.record.content?.array as! [ContentMO]
     }()
@@ -41,12 +43,13 @@ class ContentListVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let object = contentlist[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "contentCell", for: indexPath) as! ContentCell
+        let cellId = object.value(forKey: "image") == nil ? "contentCell" : "contentwithImageCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ContentCell
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd E"
         cell.regdate.text = dateFormatter.string(from: object.value(forKey: "regdate") as! Date)
         cell.contents.text = object.value(forKey: "contents") as? String
-        // Configure the cell...
+        cell.contentImage?.image = imageManager.getSavedImage(named: object.value(forKey: "image") as! String)
         
         return cell
     }
