@@ -131,12 +131,12 @@
         <scene sceneID="yGt-nb-KeQ">
             <objects>
                 <tableViewController storyboardIdentifier="ContentListVC" id="8qt-dZ-gS0" userLabel="게시물 리스트" customClass="ContentListVC" customModule="Growth" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="9Id-gN-lAM">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="9Id-gN-lAM">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="qmg-u5-wsX">
-                            <rect key="frame" x="0.0" y="709" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="668" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
@@ -148,58 +148,77 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="110"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJZ-cs-UPt">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJZ-cs-UPt">
                                             <rect key="frame" x="20" y="11" width="374" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="q54-ZG-em3"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="글의 내용" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6oB-6S-JP1">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="글의 내용" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eVw-hQ-FfD">
                                             <rect key="frame" x="20" y="40" width="374" height="59"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="jJZ-cs-UPt" firstAttribute="trailing" secondItem="UAe-k4-bXL" secondAttribute="trailingMargin" id="4JJ-Iw-Uhq"/>
+                                        <constraint firstItem="jJZ-cs-UPt" firstAttribute="leading" secondItem="UAe-k4-bXL" secondAttribute="leadingMargin" id="Ewj-f6-7zI"/>
+                                        <constraint firstItem="eVw-hQ-FfD" firstAttribute="top" secondItem="jJZ-cs-UPt" secondAttribute="bottom" constant="8" symbolic="YES" id="GPG-ai-Pfh"/>
+                                        <constraint firstItem="eVw-hQ-FfD" firstAttribute="trailing" secondItem="UAe-k4-bXL" secondAttribute="trailingMargin" id="JTZ-6O-Eob"/>
+                                        <constraint firstItem="jJZ-cs-UPt" firstAttribute="top" secondItem="UAe-k4-bXL" secondAttribute="topMargin" id="lFZ-ON-UhW"/>
+                                        <constraint firstItem="eVw-hQ-FfD" firstAttribute="bottom" secondItem="UAe-k4-bXL" secondAttribute="bottomMargin" id="spo-nY-ufg"/>
+                                        <constraint firstItem="eVw-hQ-FfD" firstAttribute="leading" secondItem="UAe-k4-bXL" secondAttribute="leadingMargin" id="xKQ-9n-r7t"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="contents" destination="6oB-6S-JP1" id="fqx-iM-r0z"/>
+                                    <outlet property="contents" destination="eVw-hQ-FfD" id="MkC-wp-aGK"/>
                                     <outlet property="regdate" destination="jJZ-cs-UPt" id="RV9-88-JGy"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="contentCellwithImage" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contentwithImageCell" rowHeight="532" id="Imi-Rf-9GB" customClass="ContentCell" customModule="Growth" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="154.5" width="414" height="532"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contentwithImageCell" rowHeight="491" id="Imi-Rf-9GB" customClass="ContentCell" customModule="Growth" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="154.5" width="414" height="491"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Imi-Rf-9GB" id="3fJ-vL-r84">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="532"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="491"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnD-xh-dlP">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnD-xh-dlP">
                                             <rect key="frame" x="20" y="11" width="374" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="isi-Bq-day">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="isi-Bq-day">
                                             <rect key="frame" x="0.0" y="40" width="414" height="414"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="글의 내용" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ska-gA-B8z">
-                                            <rect key="frame" x="20" y="462" width="374" height="59"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="글의 내용" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ska-gA-B8z">
+                                            <rect key="frame" x="20" y="462" width="374" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="isi-Bq-day" firstAttribute="top" secondItem="VnD-xh-dlP" secondAttribute="bottom" constant="8" symbolic="YES" id="CAc-sl-R5R"/>
+                                        <constraint firstItem="Ska-gA-B8z" firstAttribute="top" secondItem="isi-Bq-day" secondAttribute="bottom" constant="8" symbolic="YES" id="Cm2-hW-V1B"/>
+                                        <constraint firstItem="VnD-xh-dlP" firstAttribute="top" secondItem="3fJ-vL-r84" secondAttribute="topMargin" id="M6s-R7-fwu"/>
+                                        <constraint firstAttribute="trailing" secondItem="isi-Bq-day" secondAttribute="trailing" id="Oje-5d-Uok"/>
+                                        <constraint firstItem="isi-Bq-day" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leading" id="VDc-64-jg5"/>
+                                        <constraint firstItem="Ska-gA-B8z" firstAttribute="trailing" secondItem="3fJ-vL-r84" secondAttribute="trailingMargin" id="Yfq-m3-KnZ"/>
+                                        <constraint firstItem="Ska-gA-B8z" firstAttribute="bottom" secondItem="3fJ-vL-r84" secondAttribute="bottomMargin" id="dRV-4v-YaP"/>
+                                        <constraint firstItem="Ska-gA-B8z" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leadingMargin" id="iPa-tb-3tc"/>
+                                        <constraint firstItem="VnD-xh-dlP" firstAttribute="trailing" secondItem="3fJ-vL-r84" secondAttribute="trailingMargin" id="jFm-XI-lP9"/>
+                                        <constraint firstItem="VnD-xh-dlP" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leadingMargin" id="zYs-Dy-M2P"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="contentImage" destination="isi-Bq-day" id="IFv-HT-9qz"/>
-                                    <outlet property="contents" destination="Ska-gA-B8z" id="q4z-Yg-37w"/>
-                                    <outlet property="regdate" destination="VnD-xh-dlP" id="pcG-8v-NZD"/>
+                                    <outlet property="contentImage" destination="isi-Bq-day" id="gXR-m0-vEc"/>
+                                    <outlet property="contents" destination="Ska-gA-B8z" id="exx-aM-gAD"/>
+                                    <outlet property="regdate" destination="VnD-xh-dlP" id="gcn-Ew-itA"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
