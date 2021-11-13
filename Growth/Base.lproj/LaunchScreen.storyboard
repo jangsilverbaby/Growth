@@ -17,12 +17,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sprout" translatesAutoresizingMaskIntoConstraints="NO" id="9tL-HH-muA">
-                                <rect key="frame" x="0.0" y="246" width="414" height="405"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sprout" translatesAutoresizingMaskIntoConstraints="NO" id="9tL-HH-muA">
+                                <rect key="frame" x="0.0" y="123" width="414" height="512"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Growth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chq-pe-rVt">
-                                <rect key="frame" x="120" y="614.5" width="174.5" height="67"/>
+                                <rect key="frame" x="120" y="534.5" width="174.5" height="67"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="56"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -31,8 +30,12 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Chq-pe-rVt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="200" id="9SH-W2-itn"/>
-                            <constraint firstItem="Chq-pe-rVt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="wYn-uy-3rw"/>
+                            <constraint firstItem="Chq-pe-rVt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="6NB-7L-2aE"/>
+                            <constraint firstItem="9tL-HH-muA" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-69" id="IIs-9F-S3E"/>
+                            <constraint firstItem="9tL-HH-muA" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Nrn-pv-GIi"/>
+                            <constraint firstItem="9tL-HH-muA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="h2Q-wR-p8r"/>
+                            <constraint firstItem="9tL-HH-muA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="hlK-GM-KIO"/>
+                            <constraint firstItem="Chq-pe-rVt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="120" id="ueu-Sk-zbS"/>
                         </constraints>
                     </view>
                 </viewController>
