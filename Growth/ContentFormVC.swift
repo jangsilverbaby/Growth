@@ -74,8 +74,12 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     // 사용자가 이미지를 선택하면 자동으로 이 메소드가 호출된다.
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         self.preview.image = info[.editedImage] as? UIImage
-        
         // 이미지 피커 컨트롤러를 닫는다.
-        picker.dismiss(animated: false)
+        picker.dismiss(animated: false) {
+            if let preview = self.preview.image {
+                self.preview.image = preview.aspectFitImage(inRect: self.preview.frame)
+                self.preview.contentMode = .top
+            }
+        }
     }
 }
