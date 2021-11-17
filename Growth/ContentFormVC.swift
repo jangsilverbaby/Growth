@@ -21,6 +21,9 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd E"
         self.navigationItem.title = dateFormatter.string(from: Date())
+        contents.delegate = self
+        contents.text = "내용 입력을 입력해주세요..."
+        contents.textColor = UIColor.darkGray
     }
     
     // 저장 버튼을 클릭했을 때 호출되는 메소드
@@ -80,6 +83,22 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
                 self.preview.image = preview.aspectFitImage(inRect: self.preview.frame)
                 self.preview.contentMode = .top
             }
+        }
+    }
+}
+
+extension ContentFormVC: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.darkGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "내용을 입력해주세요..."
+            textView.textColor = UIColor.darkGray
         }
     }
 }
