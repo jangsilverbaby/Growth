@@ -54,6 +54,7 @@ class ContentListVC: UITableViewController {
         cell.contents.text = object.value(forKey: "contents") as? String
         cell.contentImage?.image = imageManager.getSavedImage(named: object.value(forKey: "image") as! String)?.aspectFitImage(inRect: cell.contentImage.frame)
         cell.contentImage?.contentMode = .top
+        cell.setting.tag = indexPath.row
         
         return cell
     }
@@ -69,6 +70,36 @@ class ContentListVC: UITableViewController {
         return UITableView.automaticDimension
     }
 
+    @IBAction func settingBtn(_ sender: UIButton) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { (_) in
+            let alert = UIAlertController(title: "게시물을 삭제하시겠습니까?", message: "OK 버튼을 누르면 게시물이 완전히 삭제됩니다.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+                // 앱 델리게이트 객체 참조
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                // 관리 객체 컨텍스트 참조
+                let context = appDelegate.persistentContainer.viewContext
+                let record = self.contentlist[sender.tag]
+                // 컨텍스트로부터 해당 객체 삭제
+                context.delete(record)
+                // 영구 저장소에 커밋한다
+                do {
+                    try context.save()
+                    self.contentlist.remove(at: sender.tag)
+                    self.tableView.reloadData()
+                } catch {
+                    context.rollback()
+                    print("delete fail")
+                }
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            self.present(alert, animated: false, completion: nil)
+        })
+        alert.addAction(UIAlertAction(title: "수정", style: .default))
+        
+        self.present(alert, animated: true)
+    }
 }
 
 // 게시물 이미지를 크키에 맞게 resizing

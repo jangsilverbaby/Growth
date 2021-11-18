@@ -148,8 +148,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="110"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJZ-cs-UPt">
-                                            <rect key="frame" x="20" y="11" width="374" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJZ-cs-UPt">
+                                            <rect key="frame" x="20" y="11" width="340" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="q54-ZG-em3"/>
                                             </constraints>
@@ -163,20 +163,35 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zbJ-0M-V85">
+                                            <rect key="frame" x="359" y="6" width="35" height="31"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="35" id="nJg-Oj-4Xu"/>
+                                            </constraints>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system" title=""/>
+                                            <connections>
+                                                <action selector="settingBtn:" destination="8qt-dZ-gS0" eventType="touchUpInside" id="CqB-fS-GtW"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="jJZ-cs-UPt" firstAttribute="trailing" secondItem="UAe-k4-bXL" secondAttribute="trailingMargin" id="4JJ-Iw-Uhq"/>
                                         <constraint firstItem="jJZ-cs-UPt" firstAttribute="leading" secondItem="UAe-k4-bXL" secondAttribute="leadingMargin" id="Ewj-f6-7zI"/>
                                         <constraint firstItem="eVw-hQ-FfD" firstAttribute="top" secondItem="jJZ-cs-UPt" secondAttribute="bottom" constant="8" symbolic="YES" id="GPG-ai-Pfh"/>
                                         <constraint firstItem="eVw-hQ-FfD" firstAttribute="trailing" secondItem="UAe-k4-bXL" secondAttribute="trailingMargin" id="JTZ-6O-Eob"/>
+                                        <constraint firstItem="zbJ-0M-V85" firstAttribute="top" secondItem="UAe-k4-bXL" secondAttribute="top" constant="6" id="jur-Pk-hzq"/>
                                         <constraint firstItem="jJZ-cs-UPt" firstAttribute="top" secondItem="UAe-k4-bXL" secondAttribute="topMargin" id="lFZ-ON-UhW"/>
+                                        <constraint firstAttribute="trailing" secondItem="zbJ-0M-V85" secondAttribute="trailing" constant="20" symbolic="YES" id="rzq-fH-UYd"/>
+                                        <constraint firstItem="zbJ-0M-V85" firstAttribute="leading" secondItem="jJZ-cs-UPt" secondAttribute="trailing" id="scc-Ub-tmp"/>
                                         <constraint firstItem="eVw-hQ-FfD" firstAttribute="bottom" secondItem="UAe-k4-bXL" secondAttribute="bottomMargin" id="spo-nY-ufg"/>
                                         <constraint firstItem="eVw-hQ-FfD" firstAttribute="leading" secondItem="UAe-k4-bXL" secondAttribute="leadingMargin" id="xKQ-9n-r7t"/>
+                                        <constraint firstItem="eVw-hQ-FfD" firstAttribute="top" secondItem="zbJ-0M-V85" secondAttribute="bottom" constant="3" id="yeQ-OC-xTE"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="contents" destination="eVw-hQ-FfD" id="MkC-wp-aGK"/>
                                     <outlet property="regdate" destination="jJZ-cs-UPt" id="RV9-88-JGy"/>
+                                    <outlet property="setting" destination="zbJ-0M-V85" id="9Ho-yw-gQb"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="contentwithImageCell" rowHeight="491" id="Imi-Rf-9GB" customClass="ContentCell" customModule="Growth" customModuleProvider="target">
@@ -187,7 +202,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="날짜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnD-xh-dlP">
-                                            <rect key="frame" x="20" y="11" width="374" height="21"/>
+                                            <rect key="frame" x="20" y="11" width="339" height="21"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -201,17 +216,33 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etv-aw-QUT">
+                                            <rect key="frame" x="359" y="6" width="35" height="31"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="35" id="ND5-16-Bin"/>
+                                            </constraints>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain" image="ellipsis" catalog="system" title=""/>
+                                            <connections>
+                                                <action selector="settingBtn:" destination="8qt-dZ-gS0" eventType="touchUpInside" id="ACh-Zy-2p5"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="etv-aw-QUT" secondAttribute="trailing" constant="20" symbolic="YES" id="6Ef-Q2-NuG"/>
                                         <constraint firstItem="isi-Bq-day" firstAttribute="top" secondItem="VnD-xh-dlP" secondAttribute="bottom" constant="8" symbolic="YES" id="CAc-sl-R5R"/>
                                         <constraint firstItem="Ska-gA-B8z" firstAttribute="top" secondItem="isi-Bq-day" secondAttribute="bottom" constant="8" symbolic="YES" id="Cm2-hW-V1B"/>
                                         <constraint firstItem="VnD-xh-dlP" firstAttribute="top" secondItem="3fJ-vL-r84" secondAttribute="topMargin" id="M6s-R7-fwu"/>
+                                        <constraint firstItem="etv-aw-QUT" firstAttribute="top" secondItem="3fJ-vL-r84" secondAttribute="top" constant="6" id="MeD-BF-K29"/>
                                         <constraint firstAttribute="trailing" secondItem="isi-Bq-day" secondAttribute="trailing" id="Oje-5d-Uok"/>
                                         <constraint firstItem="isi-Bq-day" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leading" id="VDc-64-jg5"/>
                                         <constraint firstItem="Ska-gA-B8z" firstAttribute="trailing" secondItem="3fJ-vL-r84" secondAttribute="trailingMargin" id="Yfq-m3-KnZ"/>
                                         <constraint firstItem="Ska-gA-B8z" firstAttribute="bottom" secondItem="3fJ-vL-r84" secondAttribute="bottomMargin" id="dRV-4v-YaP"/>
+                                        <constraint firstItem="isi-Bq-day" firstAttribute="top" secondItem="VnD-xh-dlP" secondAttribute="bottom" constant="8" symbolic="YES" id="fRm-2N-MDT"/>
                                         <constraint firstItem="Ska-gA-B8z" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leadingMargin" id="iPa-tb-3tc"/>
-                                        <constraint firstItem="VnD-xh-dlP" firstAttribute="trailing" secondItem="3fJ-vL-r84" secondAttribute="trailingMargin" id="jFm-XI-lP9"/>
+                                        <constraint firstItem="isi-Bq-day" firstAttribute="top" secondItem="etv-aw-QUT" secondAttribute="bottom" constant="3" id="ka5-MP-Mj0"/>
+                                        <constraint firstItem="etv-aw-QUT" firstAttribute="leading" secondItem="VnD-xh-dlP" secondAttribute="trailing" id="lcL-ry-Had"/>
+                                        <constraint firstItem="VnD-xh-dlP" firstAttribute="top" secondItem="3fJ-vL-r84" secondAttribute="topMargin" id="oPM-Yc-EUP"/>
                                         <constraint firstItem="VnD-xh-dlP" firstAttribute="leading" secondItem="3fJ-vL-r84" secondAttribute="leadingMargin" id="zYs-Dy-M2P"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -219,6 +250,7 @@
                                     <outlet property="contentImage" destination="isi-Bq-day" id="gXR-m0-vEc"/>
                                     <outlet property="contents" destination="Ska-gA-B8z" id="exx-aM-gAD"/>
                                     <outlet property="regdate" destination="VnD-xh-dlP" id="gcn-Ew-itA"/>
+                                    <outlet property="setting" destination="etv-aw-QUT" id="hfc-IC-0iw"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -582,6 +614,7 @@
     </scenes>
     <resources>
         <image name="camera.circle" catalog="system" width="128" height="121"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="labelColor">

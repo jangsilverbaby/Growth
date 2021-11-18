@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Content" representedClassName="ContentMO" syncable="YES" codeGenerationType="class">
         <attribute name="contents" optional="YES" attributeType="String"/>
         <attribute name="image" optional="YES" attributeType="String"/>
         <attribute name="regdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Profile" inverseName="content" inverseEntity="Profile"/>
+        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="content" inverseEntity="Profile"/>
     </entity>
     <entity name="Profile" representedClassName="ProfileMO" syncable="YES" codeGenerationType="class">
         <attribute name="alertCycle" optional="YES" attributeType="String"/>
@@ -13,7 +13,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="profileImg" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="content" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Content" inverseName="profile" inverseEntity="Content"/>
+        <relationship name="content" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Content" inverseName="profile" inverseEntity="Content"/>
     </entity>
     <elements>
         <element name="Content" positionX="-54" positionY="0" width="128" height="89"/>
