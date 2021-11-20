@@ -62,7 +62,7 @@ class ContentListVC: UITableViewController {
     @IBAction func contentAddBtn(_ sender: UIBarButtonItem) {
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
         pvc.record = self.record as ProfileMO
-        
+        pvc.contentSegue = "contentAdd"
         self.show(pvc, sender: self)
     }
     
@@ -96,7 +96,14 @@ class ContentListVC: UITableViewController {
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
             self.present(alert, animated: false, completion: nil)
         })
-        alert.addAction(UIAlertAction(title: "수정", style: .default))
+        
+        alert.addAction(UIAlertAction(title: "수정", style: .default) { (_) in
+            let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
+            pvc.record = self.record as ProfileMO
+            pvc.object = self.contentlist[sender.tag]
+            pvc.contentSegue = "contentEdit"
+            self.show(pvc, sender: self)
+        })
         
         self.present(alert, animated: true)
     }

@@ -13,17 +13,32 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     @IBOutlet weak var preview: UIImageView!
     @IBOutlet weak var contents: UITextView!
     var record: ProfileMO!
+    var object: ContentMO!
+    var contentSegue: String = ""
     let imageManeger = ImageManager()
     
     var contentlist: [ContentMO]!
     
     override func viewDidLoad() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd E"
-        self.navigationItem.title = dateFormatter.string(from: Date())
-        contents.delegate = self
-        contents.text = "내용 입력을 입력해주세요..."
-        contents.textColor = UIColor.darkGray
+        if contentSegue == "contentAdd" {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd E"
+            self.navigationItem.title = dateFormatter.string(from: Date())
+            contents.delegate = self
+            contents.text = "내용 입력을 입력해주세요..."
+            contents.textColor = UIColor.darkGray
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy.MM.dd E"
+            self.navigationItem.title = dateFormatter.string(from: object.value(forKey: "regdate") as! Date)
+            contents.delegate = self
+            contents.text = object.value(forKey: "contents") as? String
+            if let name = object.value(forKey: "image") {
+                let preview = imageManeger.getSavedImage(named: name as! String)
+                self.preview.image = preview!.aspectFitImage(inRect: self.preview.frame)
+                self.preview.contentMode = .top
+            }
+        }
     }
     
     // 저장 버튼을 클릭했을 때 호출되는 메소드
@@ -40,17 +55,32 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         // 관리 객체 컨텍스트 참조
         let context = appDelegate.persistentContainer.viewContext
+        
         // 관리 객체 생성 & 값을 설정
-        let object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context) as! ContentMO
-        object.contents = self.contents.text
-        object.regdate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddHHmmssE"
-        let dateString = dateFormatter.string(from: object.regdate!)
-        if let preview = self.preview.image {
-            object.image = imageManeger.saveImage(name: dateString, image: preview)
+        if contentSegue == "contentAdd" {
+            object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context) as? ContentMO
+            object.contents = self.contents.text
+            object.regdate = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMddHHmmssE"
+            let dateString = dateFormatter.string(from: object.regdate!)
+            if let preview = self.preview.image {
+                object.image = imageManeger.saveImage(name: dateString, image: preview)
+            }
+            record.addToContent(object)
+            return
+        } else {
+            object.setValue(self.contents.text, forKey: "contents")
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMddHHmmssE"
+            let dateString = dateFormatter.string(from: object.value(forKey: "regdate") as! Date)
+            if let preview = self.preview.image {
+                object.setValue(imageManeger.saveImage(name: dateString, image: preview), forKey: "image")
+            }
         }
-        record.addToContent(object)
+        
+        
+        
         
         do {
             try context.save()
