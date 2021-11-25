@@ -109,6 +109,7 @@ class FrontListVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         let object = self.frontlist[sender.tag] as? ProfileMO
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
         pvc.record = object
+        pvc.contentSegue = "contentAdd"
         self.show(pvc, sender: self)
     }
     
