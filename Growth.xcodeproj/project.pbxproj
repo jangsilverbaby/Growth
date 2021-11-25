@@ -32,7 +32,6 @@
 		F2BED600273A9E4100C8DE45 /* ContentListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */; };
 		F2BED606273AA2F200C8DE45 /* ContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED605273AA2F200C8DE45 /* ContentCell.swift */; };
 		F2BED608273AA39E00C8DE45 /* ContentFormVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BED607273AA39E00C8DE45 /* ContentFormVC.swift */; };
-		F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2DD91982706C32600015F2C /* ProfileInfo.plist */; };
 		F2FD3A3D27351727000E4431 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FD3A3C27351727000E4431 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,7 +84,6 @@
 		F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentListVC.swift; sourceTree = "<group>"; };
 		F2BED605273AA2F200C8DE45 /* ContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCell.swift; sourceTree = "<group>"; };
 		F2BED607273AA39E00C8DE45 /* ContentFormVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentFormVC.swift; sourceTree = "<group>"; };
-		F2DD91982706C32600015F2C /* ProfileInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProfileInfo.plist; sourceTree = "<group>"; };
 		F2FD3A3C27351727000E4431 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,7 +164,6 @@
 				F200FA7426EA4406004D59EE /* FrontData.swift */,
 				F200FA7626EA4492004D59EE /* FrontListVC.swift */,
 				F27C7C5826FEEF5D00543546 /* ProfileVC.swift */,
-				F2DD91982706C32600015F2C /* ProfileInfo.plist */,
 				F2FD3A3C27351727000E4431 /* ImageManager.swift */,
 				F2BED5FF273A9E4100C8DE45 /* ContentListVC.swift */,
 				F2BED605273AA2F200C8DE45 /* ContentCell.swift */,
@@ -296,7 +293,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2DD91992706C32600015F2C /* ProfileInfo.plist in Resources */,
 				F200FA6A26E9FCC9004D59EE /* food.HEIC in Resources */,
 				F200FA8126EA53AB004D59EE /* study.PNG in Resources */,
 				F2BBA45626E63CB4002AD282 /* LaunchScreen.storyboard in Resources */,
