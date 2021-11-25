@@ -68,7 +68,6 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
                 object.image = imageManeger.saveImage(name: dateString, image: preview)
             }
             record.addToContent(object)
-            return
         } else {
             object.setValue(self.contents.text, forKey: "contents")
             let dateFormatter = DateFormatter()
@@ -80,15 +79,12 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         }
         
         
-        
-        
         do {
             try context.save()
         } catch {
             context.rollback()
             print("save fail")
         }
-        
         self.navigationController?.popViewController(animated: true)
     }
     
