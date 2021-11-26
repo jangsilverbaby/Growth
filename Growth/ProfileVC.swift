@@ -10,7 +10,7 @@ import CoreData
 class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var profileImg: UIImageView! // 프로필 이미지
     @IBOutlet weak var profileImgEditBtn: UIButton! // 프로필 이미지 수정 버튼
-    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var name: UILabel! // 이름
     @IBOutlet weak var startDate: UITextField! // 시작 날짜
     @IBOutlet weak var isAlert: UISwitch! // 기록 알림 유무
     @IBOutlet weak var alertCycle: UITextField! // 알림 주기
@@ -19,12 +19,12 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     @IBOutlet weak var cycleLabel: UILabel! // 알림 주기 라벨
     @IBOutlet weak var timeLabel: UILabel! // 알림 시간 라벨
     
-    var record = NSManagedObject()
-    var profileSegue = ""
+    var record = NSManagedObject() // 선택된 프로필
+    var profileSegue = "" // 프로필 등록인지 프로필 수정인지 구분
     let imageManager = ImageManager()
-    var frontlist = [NSManagedObject()]
+    var frontlist = [NSManagedObject()] // 프로필 리스트
     
-    var cycleList = ["매일", "일주일에 한 번", "일 년에 한 번"]
+    var cycleList = ["매일", "일주일에 한 번", "일 년에 한 번"] // 알림 주기 리스트
     
     let datePicker = UIDatePicker() // 시작 날짜 피커뷰
     let cyclePicker = UIPickerView() // 알림 주기 피커뷰
@@ -35,9 +35,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if profileSegue == "editProfile" {
-            // 프로필 수정 화면
-            // 이미지 불러오기
+        if profileSegue == "editProfile" { // 프로필 수정 화면
             self.profileImg.image = imageManager.getSavedImage(named: record.value(forKey: "profileImg") as! String)
             self.name.text = record.value(forKey: "name") as? String
             let dateFormatter = DateFormatter()
@@ -83,38 +81,40 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // 선택된 row 보이기
+        // 선택된 알림 주기 보이기
         if profileSegue == "editProfile" {
             self.cyclePicker.selectRow(cycleList.firstIndex(of: record.value(forKey: "alertCycle") as? String ?? "매일")!, inComponent: 0, animated: false)
         }
     }
     
+    // 탭하면 뷰를 닫는다.
     @objc func viewTapped(_ sender : UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
     // 완료 버튼
     @IBAction func done(_ sender: Any) {
+        // 이름이 중복인지 알기 위한 리스트
         var namelist: [String] = []
         for i in frontlist {
-            if i == record {
+            if i == record { // 이름 리스트에서 본인 이름은 제외한다.
                 continue
             }
             namelist.append(i.value(forKey: "name") as! String)
         }
-        
+        // 이름 앞뒤 공백 제거하기
         name.text = name.text!.trimmingCharacters(in: .whitespaces)
         
-        if self.name.text == "" {
+        if self.name.text == "" { // 이름이 빈칸이면
             nameAlert("이름을 빈칸으로 둘 수 없습니다.\n이름을 입력해주세요")
-        } else if namelist.contains(self.name.text!) {
+        } else if namelist.contains(self.name.text!) { // 이름이 중복이면
             nameAlert("중복된 이름은 사용할 수 없습니다.\n다른 이름을 입력해 주세요")
         } else {
             // 앱 델리게이트 객체 참조
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             // 관리 객체 컨텍스트 참조
             let context = appDelegate.persistentContainer.viewContext
-            if profileSegue == "addProfile" {
+            if profileSegue == "addProfile" { // 프로필 등록이면
                 // 관리 객체 생성 & 값을 설정
                 record = NSEntityDescription.insertNewObject(forEntityName: "Profile", into: context)
             }
@@ -133,6 +133,7 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
             let alertTime = timeFormatter.date(from: self.alertTime.text!)
             record.setValue(alertTime, forKey: "alertTime")
             
+            // 영구 저장소에 커밋한다
             do {
                 try context.save()
             } catch {
@@ -140,10 +141,10 @@ class ProfileVC : UITableViewController, UINavigationControllerDelegate{
                 print("save fail")
             }
             
-            if self.isAlert.isOn {
+            if self.isAlert.isOn { // 알림 설정을 on 하면 기존의 알림은 삭제하고 현재 설정된 알림으로 등록한다.
                 cancelAlert(self.name.text!)
                 alert(startDate, alertTime, self.name.text!)
-            } else {
+            } else { // 알림 설정을 off 하면 기존의 알림 삭제
                 cancelAlert(self.name.text!)
             }
             
@@ -266,23 +267,10 @@ extension ProfileVC {
 //MARK: - 알림 여부
 extension ProfileVC {
     @IBAction func isAlertChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            self.cycleLabel.textColor = .label
-            self.timeLabel.textColor = .label
-            self.alertCycle.textColor = .label
-            self.alertTime.textColor = .label
-            self.alertCycle.isEnabled = true
-            self.alertTime.isEnabled = true
-        } else {
-            self.cycleLabel.textColor = .opaqueSeparator
-            self.timeLabel.textColor = .opaqueSeparator
-            self.alertCycle.textColor = .opaqueSeparator
-            self.alertTime.textColor = .opaqueSeparator
-            self.alertCycle.isEnabled = false
-            self.alertTime.isEnabled = false
-        }
+        isAlertColor(sender)
     }
     
+    // 알림 설정 여부에 따른 색상
     func isAlertColor(_ sender: UISwitch) {
         if sender.isOn {
             self.cycleLabel.textColor = .label
@@ -304,7 +292,6 @@ extension ProfileVC {
     func alert(_ startDate: Date?, _ alertTime: Date?, _ identifier: String){
         let notificationContent = UNMutableNotificationContent()
         notificationContent.body = "\(self.name.text!)을(를) 기록해주세요!"
-        //notificationContent.userInfo = ["targetScene" : "sqlash"] // 푸쉬 받을 때 오는 데이터
         
         let calendar = Calendar.current
         var components : DateComponents

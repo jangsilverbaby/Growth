@@ -10,28 +10,26 @@ import CoreData
 
 class ContentListVC: UITableViewController {
     
-    var record: ProfileMO!
+    var record: ProfileMO! // 선택된 프로필
     
     let imageManager = ImageManager()
     
+    // 게시물 리스트
     lazy var contentlist: [ContentMO]! = {
         return self.record.content?.array as! [ContentMO]
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // 게시물에 따라 행 높이가 달라짐
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 400
         self.navigationItem.title = record.value(forKey: "name") as? String
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
         contentlist = self.record.content?.array as? [ContentMO]
+        // 게시물 최신순으로 정렬
         contentlist.sort(by: {$0.regdate! > $1.regdate!})
         self.tableView.reloadData()
     }
@@ -39,11 +37,9 @@ class ContentListVC: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return self.contentlist.count
     }
-    
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let object = contentlist[indexPath.row]
         let cellId = object.value(forKey: "image") == nil ? "contentCell" : "contentwithImageCell"
@@ -59,6 +55,14 @@ class ContentListVC: UITableViewController {
         return cell
     }
     
+    // 게시물에 따라 행 높이가 달라짐
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    // MARK: - Button
+    
+    // 게시물 등록 버튼
     @IBAction func contentAddBtn(_ sender: UIBarButtonItem) {
         let pvc = self.storyboard?.instantiateViewController(withIdentifier: "ContentFormVC") as! ContentFormVC
         pvc.record = self.record as ProfileMO
@@ -66,10 +70,7 @@ class ContentListVC: UITableViewController {
         self.show(pvc, sender: self)
     }
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
+    // 게시물 설정 버튼 -> 삭제, 수정
     @IBAction func settingBtn(_ sender: UIButton) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))

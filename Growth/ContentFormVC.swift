@@ -10,24 +10,24 @@ import CoreData
 
 class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @IBOutlet weak var preview: UIImageView!
-    @IBOutlet weak var contents: UITextView!
-    var record: ProfileMO!
-    var object: ContentMO!
-    var contentSegue: String = ""
+    @IBOutlet weak var preview: UIImageView! // 게시 이미지
+    @IBOutlet weak var contents: UITextView! // 게시글
+    var record: ProfileMO! // 선택된 프로필
+    var object: ContentMO! // 선책된 게시글
+    var contentSegue: String = "" // 게시물 등록인지 수정인지 구분
     let imageManeger = ImageManager()
     
-    var contentlist: [ContentMO]!
+    var contentlist: [ContentMO]! // 게시물 리스트
     
     override func viewDidLoad() {
-        if contentSegue == "contentAdd" {
+        if contentSegue == "contentAdd" { // 게시물 등록이면
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd E"
             self.navigationItem.title = dateFormatter.string(from: Date())
             contents.delegate = self
             contents.text = "내용 입력을 입력해주세요..."
             contents.textColor = UIColor.darkGray
-        } else {
+        } else { // 게시물 수정이면
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd E"
             self.navigationItem.title = dateFormatter.string(from: object.value(forKey: "regdate") as! Date)
@@ -64,7 +64,7 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         let context = appDelegate.persistentContainer.viewContext
         
         // 관리 객체 생성 & 값을 설정
-        if contentSegue == "contentAdd" {
+        if contentSegue == "contentAdd" { // 게시글 등록이면
             object = NSEntityDescription.insertNewObject(forEntityName: "Content", into: context) as? ContentMO
             object.contents = self.contents.text
             object.regdate = Date()
@@ -75,7 +75,7 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
                 object.image = imageManeger.saveImage(name: dateString, image: preview)
             }
             record.addToContent(object)
-        } else {
+        } else { // 게시글 수정이면
             object.setValue(self.contents.text, forKey: "contents")
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyyMMddHHmmssE"
@@ -120,6 +120,7 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     }
 }
 
+// 내용을 입력하라는 안내 메세지 
 extension ContentFormVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.darkGray {

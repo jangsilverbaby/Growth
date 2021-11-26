@@ -56,9 +56,6 @@
                                                     <state key="normal" image="gearshape.fill" catalog="system">
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="editBtnPressed:" destination="1OQ-Ta-Ubm" eventType="touchUpInside" id="3a7-cy-0h8"/>
-                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p3W-ex-N5C">
                                                     <rect key="frame" x="8" y="170" width="135" height="21"/>
@@ -90,7 +87,7 @@
                                         <size key="customSize" width="180" height="199"/>
                                         <connections>
                                             <outlet property="contentAddBtn" destination="llW-gG-C22" id="rDA-Zu-1Aw"/>
-                                            <outlet property="editBtn" destination="da0-F3-k0m" id="gKV-Ug-uLB"/>
+                                            <outlet property="editBtn" destination="da0-F3-k0m" id="jaR-2p-7Zp"/>
                                             <outlet property="frontImgView" destination="yvq-AS-yaU" id="mhy-oX-fX1"/>
                                             <outlet property="nameLabel" destination="p3W-ex-N5C" id="hTm-Nk-ODO"/>
                                         </connections>

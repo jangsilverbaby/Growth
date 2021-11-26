@@ -8,28 +8,19 @@
 import UIKit
 
 class FrontCell: UICollectionViewCell {
-    @IBOutlet weak var frontImgView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var editBtn: UIButton!
-    @IBOutlet weak var contentAddBtn: UIButton!
-    
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    @IBOutlet weak var frontImgView: UIImageView! // 프로필 이미지 뷰
+    @IBOutlet weak var nameLabel: UILabel! // 이름 라벨
+    @IBOutlet weak var editBtn: UIButton! // 수정 버튼
+    @IBOutlet weak var contentAddBtn: UIButton! // 게시물 추가 버튼
+
     var cornerRadius: CGFloat = 5.0
     
+    // 인터페이스 빌더에서 뷰가 만들어졌을때 호출
+    // 객체가 초기화(인스턴스화)된 후 호출
     override func awakeFromNib() {
-            super.awakeFromNib()
-                
-            // Apply rounded corners to contentView
-            contentView.layer.cornerRadius = cornerRadius
-            contentView.layer.masksToBounds = true
-            
-            // Set masks to bounds to false to avoid the shadow
-            // from being clipped to the corner radius
-            layer.cornerRadius = cornerRadius
-            layer.masksToBounds = false
-    }
-    
-    @IBAction func editBtnPressed(_ sender: Any) {
-        appDelegate.index = self.editBtn.tag
+        super.awakeFromNib()
+
+        // 셀을 둥글게 만들기
+        self.layer.cornerRadius = cornerRadius
     }
 }
