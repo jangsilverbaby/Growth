@@ -51,6 +51,13 @@ class ContentFormVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             return
         }
         
+        guard self.contents.text != "내용 입력을 입력해주세요..." else {
+            let alert = UIAlertController(title: nil, message: "내용을 입력해주세요", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+        
         // 앱 델리게이트 객체 참조
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         // 관리 객체 컨텍스트 참조
