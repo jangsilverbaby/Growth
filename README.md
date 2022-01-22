@@ -6,7 +6,7 @@
 
 ## 사용 기술
 
-Swift, Xcode, UIKit, Storyboard, Core Date
+Swift, Xcode, UIKit, Storyboard, Core Data
 
 ## App Icon 과 Launch Screen
 
